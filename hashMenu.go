@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"github.com/pterm/pterm"
+	"github.com/sqweek/dialog"
 	"openDevTools/HashGenerator"
+	"openDevTools/models"
 )
 
 func showHashMenu() {
@@ -15,18 +16,53 @@ func showHashMenu() {
 
 	m.navItems = append(m.navItems, navItem{
 		name: "From string",
-		do:   showHashInputAndWResult,
+		do:   showHashInputAndResult,
 	})
 
 	m.navItems = append(m.navItems, navItem{
 		name: "From file",
-		do:   func() { fmt.Println("make this part") },
+		do:   showSelectFile4HashAndResult,
 	})
 
 	m.show()
 }
 
-func showHashInputAndWResult() {
+func showSelectFile4HashAndResult() {
+	ClearScreen()
+	// Create a default interactive text input with multi-line enabled.
+	// This allows the user to input multiple lines of text.
+	filepath, err := dialog.File().Filter("any file", "*").Load()
+
+	if err != nil {
+		pterm.Warning.Println(err)
+		return
+	}
+
+	pterm.Info.Println("filepath:", filepath)
+
+	result, err := HashGenerator.FromFile(filepath)
+	if err != nil {
+		pterm.Warning.Println(err)
+		return
+	}
+
+	showHashTable(result)
+
+}
+
+func showHashTable(hashResult []models.ResultItem) {
+	tableData := pterm.TableData{
+		{"hash name", "value"},
+	}
+
+	for _, r := range hashResult {
+		tableData = append(tableData, []string{r.Name, r.Value})
+	}
+
+	showTable(tableData)
+}
+
+func showHashInputAndResult() {
 	ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
@@ -41,15 +77,7 @@ func showHashInputAndWResult() {
 
 	result := HashGenerator.FromString(text)
 
-	tableData := pterm.TableData{
-		{"hash name", "value"},
-	}
-
-	for _, r := range result {
-		tableData = append(tableData, []string{r.Name, r.Value})
-	}
-
-	showTable(tableData)
+	showHashTable(result)
 
 }
 
