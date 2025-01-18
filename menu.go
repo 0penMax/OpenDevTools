@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"github.com/pterm/pterm"
 	"github.com/pterm/pterm/putils"
+	"os"
+	"os/exec"
+	"runtime"
 )
 
 type Menu struct {
@@ -20,6 +23,7 @@ type navItem struct {
 func (m *Menu) show() {
 	if m.title != "" {
 		pterm.DefaultHeader.WithFullWidth().Println(m.title)
+		pterm.Println()
 	}
 	if m.desc != "" {
 		pterm.Info.Println(m.desc)
@@ -40,6 +44,7 @@ func (m *Menu) show() {
 }
 
 func showMainMenu() {
+	ClearScreen()
 	// Generate BigLetters and store in 's'
 	s, _ := pterm.DefaultBigText.WithLetters(putils.LettersFromString("Open Dev Utils")).Srender()
 	// Print the BigLetters 's' centered in the terminal
@@ -50,7 +55,7 @@ func showMainMenu() {
 
 	m.navItems = append(m.navItems, navItem{
 		name: "Hash Generator",
-		do:   func() { fmt.Println("hello Hash Generator") },
+		do:   func() { showHashMenu() },
 	})
 
 	m.navItems = append(m.navItems, navItem{
@@ -59,4 +64,16 @@ func showMainMenu() {
 	})
 
 	m.show()
+}
+
+func ClearScreen() {
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cmd", "/c", "cls")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	} else {
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
 }
