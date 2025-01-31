@@ -51,15 +51,11 @@ func showSelectFile4HashAndResult() {
 }
 
 func showHashTable(hashResult []models.ResultItem) {
-	tableData := pterm.TableData{
+	tableHeader := pterm.TableData{
 		{"hash name", "value"},
 	}
 
-	for _, r := range hashResult {
-		tableData = append(tableData, []string{r.Name, r.Value})
-	}
-
-	showTable(tableData)
+	showTable(tableHeader, hashResult)
 }
 
 func showHashInputAndResult() {
@@ -81,8 +77,9 @@ func showHashInputAndResult() {
 
 }
 
-func showTable(tableData pterm.TableData) {
-	// Create a table with the defined data.
-	// The table has a header and is boxed.
-	pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
+func showTable(tableHeader pterm.TableData, tableData []models.ResultItem) {
+	for _, r := range tableData {
+		tableHeader = append(tableHeader, []string{r.Name, r.Value})
+	}
+	pterm.DefaultTable.WithHasHeader().WithData(tableHeader).Render()
 }

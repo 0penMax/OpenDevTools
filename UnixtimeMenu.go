@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/pterm/pterm"
 	"openDevTools/Unixtime"
-	"openDevTools/models"
 	"strconv"
 )
 
@@ -46,7 +45,6 @@ func showToUnixtimeDialog() {
 		pterm.Error.Println(err)
 		return
 	}
-	pterm.Println("result:")
 
 	pterm.Println(r)
 
@@ -78,18 +76,10 @@ func showFromUnixtimeDialog() {
 	}
 	pterm.Println("result:")
 
-	showParseUnixtimeTable(r)
-
-}
-
-func showParseUnixtimeTable(hashResult []models.ResultItem) {
-	tableData := pterm.TableData{
+	tableHeader := pterm.TableData{
 		{"name", "value"},
 	}
 
-	for _, r := range hashResult {
-		tableData = append(tableData, []string{r.Name, r.Value})
-	}
+	showTable(tableHeader, r)
 
-	showTable(tableData)
 }
