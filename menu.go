@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/pterm/pterm"
 	"github.com/pterm/pterm/putils"
 	"os"
@@ -45,6 +44,7 @@ func (m *Menu) show() {
 
 func showMainMenu() {
 	ClearScreen()
+	pterm.Println()
 	// Generate BigLetters and store in 's'
 	s, _ := pterm.DefaultBigText.WithLetters(putils.LettersFromString("Open Dev Utils")).Srender()
 	// Print the BigLetters 's' centered in the terminal
@@ -55,12 +55,12 @@ func showMainMenu() {
 
 	m.navItems = append(m.navItems, navItem{
 		name: "Hash Generator",
-		do:   func() { showHashMenu() },
+		do:   showHashMenu,
 	})
 
 	m.navItems = append(m.navItems, navItem{
 		name: "Unixtime",
-		do:   func() { fmt.Println("hello Unixtime") },
+		do:   showUnixTimeMenu,
 	})
 
 	m.show()
