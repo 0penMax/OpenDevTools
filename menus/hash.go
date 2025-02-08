@@ -1,4 +1,4 @@
-package main
+package menus
 
 import (
 	"github.com/pterm/pterm"

@@ -1,6 +1,8 @@
 package main
 
+import "openDevTools/menus"
+
 func main() {
-	showMainMenu()
+	menus.ShowMainMenu()
 
 }

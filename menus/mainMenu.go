@@ -1,4 +1,4 @@
-package main
+package menus
 
 import (
 	"github.com/pterm/pterm"
@@ -42,7 +42,7 @@ func (m *Menu) show() {
 	f()
 }
 
-func showMainMenu() {
+func ShowMainMenu() {
 	ClearScreen()
 	pterm.Println()
 	// Generate BigLetters and store in 's'
