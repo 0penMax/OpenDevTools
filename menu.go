@@ -28,7 +28,7 @@ func (m *Menu) show() {
 		pterm.Info.Println(m.desc)
 	}
 	navMap := make(map[string]func())
-	menu := make([]string, len(m.navItems))
+	var menu []string
 	for _, n := range m.navItems {
 		navMap[n.name] = n.do
 		menu = append(menu, n.name)
@@ -61,6 +61,11 @@ func showMainMenu() {
 	m.navItems = append(m.navItems, navItem{
 		name: "Unixtime",
 		do:   showUnixTimeMenu,
+	})
+
+	m.navItems = append(m.navItems, navItem{
+		name: "Base64 string",
+		do:   showBase64StringMenu,
 	})
 
 	m.show()
