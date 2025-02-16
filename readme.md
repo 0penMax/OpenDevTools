@@ -9,6 +9,7 @@ Open source offline console realization for most popular tools for developers.
 - [x] Encode/decode to unix time.
 - [x] Base64 decode/encode string
 - [ ] Base64 decode/encode image
+- [x] HEX to RGB/RGBA color
 - [ ] Lorem Ipsum Generator
 - [ ] URL Encode/Decode
 - [ ] YAML to JSON

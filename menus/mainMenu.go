@@ -27,19 +27,22 @@ func (m *Menu) show() {
 	if m.desc != "" {
 		pterm.Info.Println(m.desc)
 	}
-	navMap := make(map[string]func())
-	var menu []string
-	for _, n := range m.navItems {
-		navMap[n.name] = n.do
-		menu = append(menu, n.name)
+	if len(m.navItems) > 0 {
+		navMap := make(map[string]func())
+		var menu []string
+		for _, n := range m.navItems {
+			navMap[n.name] = n.do
+			menu = append(menu, n.name)
+		}
+
+		// Use PTerm's interactive select feature to present the options to the user and capture their selection
+		// The Show() method displays the options and waits for the user's input
+		selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(menu).Show()
+
+		f := navMap[selectedOption]
+		f()
 	}
 
-	// Use PTerm's interactive select feature to present the options to the user and capture their selection
-	// The Show() method displays the options and waits for the user's input
-	selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(menu).Show()
-
-	f := navMap[selectedOption]
-	f()
 }
 
 func ShowMainMenu() {
@@ -66,6 +69,11 @@ func ShowMainMenu() {
 	m.navItems = append(m.navItems, navItem{
 		name: "Base64 string",
 		do:   showBase64StringMenu,
+	})
+
+	m.navItems = append(m.navItems, navItem{
+		name: "Color convertor",
+		do:   showColorTransformMenu,
 	})
 
 	m.show()
