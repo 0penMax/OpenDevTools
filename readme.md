@@ -8,7 +8,7 @@ Open source offline console realization for most popular tools for developers.
 - [x] Create MD5, SHA-1, SHA-256, SHA-384, SHA-512 from file.
 - [x] Encode/decode to unix time.
 - [x] Base64 decode/encode string
-- [ ] Base64 decode/encode image
+- [x] Base64 decode/encode image
 - [x] HEX to RGB/RGBA color
 - [ ] Lorem Ipsum Generator
 - [ ] URL Encode/Decode

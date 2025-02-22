@@ -72,6 +72,11 @@ func ShowMainMenu() {
 	})
 
 	m.navItems = append(m.navItems, navItem{
+		name: "Base64 image",
+		do:   showBase64ImgMenu,
+	})
+
+	m.navItems = append(m.navItems, navItem{
 		name: "Color convertor",
 		do:   showColorTransformMenu,
 	})
