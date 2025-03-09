@@ -10,7 +10,7 @@ Open source offline console realization for most popular tools for developers.
 - [x] Base64 decode/encode string
 - [x] Base64 decode/encode image
 - [x] HEX to RGB/RGBA color
-- [ ] Lorem Ipsum Generator
+- [x] Lorem Ipsum Generator
 - [ ] URL Encode/Decode
 - [ ] YAML to JSON
 - [ ] JSON to YAML

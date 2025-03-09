@@ -37,7 +37,7 @@ func (m *Menu) show() {
 
 		// Use PTerm's interactive select feature to present the options to the user and capture their selection
 		// The Show() method displays the options and waits for the user's input
-		selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(menu).Show()
+		selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
 
 		f := navMap[selectedOption]
 		f()
@@ -79,6 +79,11 @@ func ShowMainMenu() {
 	m.navItems = append(m.navItems, navItem{
 		name: "Color convertor",
 		do:   showColorTransformMenu,
+	})
+
+	m.navItems = append(m.navItems, navItem{
+		name: "lorem generator",
+		do:   showLoremMenu,
 	})
 
 	m.show()
