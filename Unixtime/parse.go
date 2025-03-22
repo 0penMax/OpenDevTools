@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+func Now() string {
+	return fmt.Sprintf("%d", time.Now().Unix())
+}
+
 // ParseStr parse datetime string in format "dd/mm/yyyy hh:mm:ss" to unixtime
 func ParseStr(date string) (int64, error) {
 	layout := "02/01/2006 15:04:05" // This is the format for "dd/mm/yyyy hh:mm:ss"

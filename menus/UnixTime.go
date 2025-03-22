@@ -14,6 +14,11 @@ func showUnixTimeMenu() {
 	m.desc = "Parse from/to unixtime."
 
 	m.navItems = append(m.navItems, navItem{
+		name: "Now",
+		do:   showNowUnixTimeDialog,
+	})
+
+	m.navItems = append(m.navItems, navItem{
 		name: "To unixtime",
 		do:   showToUnixtimeDialog,
 	})
@@ -22,8 +27,6 @@ func showUnixTimeMenu() {
 		name: "From unixtime",
 		do:   showFromUnixtimeDialog,
 	})
-
-	//TODO add print unixtime now
 
 	m.show()
 }
@@ -49,6 +52,12 @@ func showToUnixtimeDialog() {
 	}
 
 	pterm.Println(r)
+}
+
+func showNowUnixTimeDialog() {
+	ClearScreen()
+
+	pterm.Println(Unixtime.Now())
 
 }
 
