@@ -11,6 +11,7 @@ Open source offline console realization for most popular tools for developers.
 - [x] Base64 decode/encode image
 - [x] HEX to RGB/RGBA color
 - [x] Lorem Ipsum Generator
+- [x] JWT Read
 - [ ] URL Encode/Decode
 - [ ] YAML to JSON
 - [ ] JSON to YAML

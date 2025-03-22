@@ -86,6 +86,11 @@ func ShowMainMenu() {
 		do:   showLoremMenu,
 	})
 
+	m.navItems = append(m.navItems, navItem{
+		name: "JWT",
+		do:   showJwtMenu,
+	})
+
 	m.show()
 }
 
