@@ -27,6 +27,7 @@ func showBase64StringMenu() {
 
 func showBase64EncodeDialog() {
 	ClearScreen()
+	pterm.Info.Println("Used RawURLEncoding.")
 
 	//pterm.Println("Write your date in format - dd/mm/yyyy hh:mm:ss")
 	textInput := pterm.DefaultInteractiveTextInput
@@ -62,6 +63,6 @@ func showBase64DecodeDialog() {
 		pterm.Error.Println(err)
 		return
 	}
-	pterm.Println(r)
+	pterm.Println(string(r))
 
 }

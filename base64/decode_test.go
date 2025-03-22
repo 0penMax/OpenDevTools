@@ -6,6 +6,55 @@ import (
 	"testing"
 )
 
+func TestDecodeBase64(t *testing.T) {
+	tests := []struct {
+		name      string
+		input     string
+		expected  string
+		expectErr bool
+	}{
+		{
+			name:     "Standard Base64",
+			input:    "SGVsbG8gV29ybGQh", // "Hello World!"
+			expected: "Hello World!",
+		},
+		{
+			name:     "URL-safe Base64",
+			input:    "SGVsbG8tV29ybGQ_", // Decodes to "Hello-World?"
+			expected: "Hello-World?",
+		},
+		{
+			name:     "Standard Base64 without padding",
+			input:    "SGVsbG8gV29ybGQh", // Even without explicit "=" padding, this decodes correctly.
+			expected: "Hello World!",
+		},
+		{
+			name:      "Invalid Base64",
+			input:     "Invalid*Base64",
+			expectErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			decoded, err := Decode(tt.input)
+			if tt.expectErr {
+				if err == nil {
+					t.Errorf("expected an error but got none")
+				}
+				return
+			}
+			if err != nil {
+				t.Errorf("unexpected error: %v", err)
+				return
+			}
+			if string(decoded) != tt.expected {
+				t.Errorf("expected %q, got %q", tt.expected, decoded)
+			}
+		})
+	}
+}
+
 func TestDecodeImage(t *testing.T) {
 	testCases := []struct {
 		name     string

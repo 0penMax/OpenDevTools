@@ -9,7 +9,7 @@ import (
 )
 
 func Encode(input string) string {
-	return base64.StdEncoding.EncodeToString([]byte(input))
+	return base64.RawURLEncoding.EncodeToString([]byte(input))
 }
 
 // EncodeImage reads the image from the given file path and returns its Base64 encoded string.

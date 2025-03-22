@@ -7,12 +7,27 @@ import (
 	"strings"
 )
 
-func Decode(input string) (string, error) {
-	decodedBytes, err := base64.StdEncoding.DecodeString(input)
-	if err != nil {
-		return "", err
+func Decode(input string) ([]byte, error) {
+	// Remove any whitespace.
+	input = strings.TrimSpace(input)
+
+	// Check if the input contains URL-safe characters.
+	isURLSafe := strings.ContainsAny(input, "-_")
+
+	// Determine if we need to use the raw (unpadded) variant.
+	useRaw := len(input)%4 != 0
+
+	if isURLSafe {
+		if useRaw {
+			return base64.RawURLEncoding.DecodeString(input)
+		}
+		return base64.URLEncoding.DecodeString(input)
+	} else {
+		if useRaw {
+			return base64.RawStdEncoding.DecodeString(input)
+		}
+		return base64.StdEncoding.DecodeString(input)
 	}
-	return string(decodedBytes), nil
 }
 
 // DecodeImage decodes the Base64-encoded image from either a raw Data URI
