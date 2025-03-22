@@ -41,6 +41,7 @@ func (m *Menu) show() {
 
 		f := navMap[selectedOption]
 		f()
+		showDoYouWant2Continue()
 	}
 
 }
@@ -98,10 +99,29 @@ func ClearScreen() {
 	if runtime.GOOS == "windows" {
 		cmd := exec.Command("cmd", "/c", "cls")
 		cmd.Stdout = os.Stdout
-		cmd.Run()
+		_ = cmd.Run()
 	} else {
 		cmd := exec.Command("clear")
 		cmd.Stdout = os.Stdout
-		cmd.Run()
+		_ = cmd.Run()
+	}
+}
+
+func showDoYouWant2Continue() {
+	// Create an interactive continue prompt with default settings
+	// This will pause the program execution until the user presses enter
+	// The message displayed is "Press 'Enter' to continue..."
+	prompt := pterm.DefaultInteractiveContinue
+	prompt.Options = []string{"yes", "no"}
+
+	// Show the prompt and wait for user input
+	// The returned result is the user's input (should be empty as it's a continue prompt)
+	// The second return value is an error which is ignored here
+	result, _ := prompt.Show()
+
+	if result == "yes" {
+		ShowMainMenu()
+	} else {
+		return
 	}
 }

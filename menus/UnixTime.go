@@ -23,6 +23,8 @@ func showUnixTimeMenu() {
 		do:   showFromUnixtimeDialog,
 	})
 
+	//TODO add print unixtime now
+
 	m.show()
 }
 
