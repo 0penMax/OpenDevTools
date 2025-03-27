@@ -92,6 +92,11 @@ func ShowMainMenu() {
 		do:   showJwtMenu,
 	})
 
+	m.navItems = append(m.navItems, navItem{
+		name: "PGP",
+		do:   showPgpMenu,
+	})
+
 	m.show()
 }
 

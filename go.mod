@@ -6,6 +6,7 @@ require (
 	github.com/pterm/pterm v0.12.80
 	github.com/sqweek/dialog v0.0.0-20240226140203-065105509627
 	golang.design/x/clipboard v0.7.0
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 )
 
 require (
