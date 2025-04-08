@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"openDevTools/base64"
 	"openDevTools/models"
+	"strconv"
 	"strings"
 )
 
@@ -58,9 +59,18 @@ func readJson(jsonData []byte) ([]models.ResultItem, error) {
 	// Convert every value to a string using fmt.Sprintf
 	var result []models.ResultItem
 	for key, value := range temp {
+		var strValue string
+		switch v := value.(type) {
+		case float64:
+			strValue = strconv.FormatFloat(v, 'f', -1, 64)
+		case float32:
+			strValue = strconv.FormatFloat(float64(v), 'f', -1, 64)
+		default:
+			strValue = fmt.Sprintf("%v", v)
+		}
 		result = append(result, models.ResultItem{
 			Name:  key,
-			Value: fmt.Sprintf("%v", value),
+			Value: strValue,
 		})
 	}
 	return result, nil
