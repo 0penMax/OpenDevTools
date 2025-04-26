@@ -12,13 +12,14 @@ Open source offline console realization for most popular tools for developers.
 - [x] HEX to RGB/RGBA color
 - [x] Lorem Ipsum Generator
 - [x] JWT Read
+- [x] JS Beautify
+- [ ] JS Minify
 - [ ] URL Encode/Decode
 - [ ] YAML to JSON
 - [ ] JSON to YAML
 - [ ] Number Base Converter
 - [ ] HTML Beautify/Minify
 - [ ] CSS Beautify/Minify
-- [ ] JS Beautify/Minify
 - [ ] JSON Format/Validate
 - [ ] QR Code Reader/Generator
 - [ ] JSON to CSV
