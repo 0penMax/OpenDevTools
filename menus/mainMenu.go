@@ -97,6 +97,11 @@ func ShowMainMenu() {
 		do:   showPgpMenu,
 	})
 
+	m.navItems = append(m.navItems, navItem{
+		name: "JS",
+		do:   showJsMenu,
+	})
+
 	m.show()
 }
 
