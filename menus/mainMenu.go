@@ -41,7 +41,6 @@ func (m *Menu) show() {
 
 		f := navMap[selectedOption]
 		f()
-		showDoYouWant2Continue()
 	}
 
 }
@@ -103,6 +102,7 @@ func ShowMainMenu() {
 	})
 
 	m.show()
+	showDoYouWant2Continue()
 }
 
 func ClearScreen() {
