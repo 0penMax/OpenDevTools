@@ -30,7 +30,7 @@ import (
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-type tokenizer struct {
+type Tokenizer struct {
 	input                   *string
 	options                 optargs.MapType
 	last_token              Token
@@ -53,7 +53,7 @@ var line_starters = strings.Split("continue,try,throw,return,var,let,const,if,sw
 
 var reserved_words = append(line_starters, []string{"do", "in", "else", "get", "set", "new", "catch", "finally", "typeof"}...)
 
-func (self *tokenizer) Tokenize() chan Token {
+func (self *Tokenizer) Tokenize() chan Token {
 	tkch := make(chan Token)
 
 	go func() {
@@ -103,7 +103,7 @@ func (self *tokenizer) Tokenize() chan Token {
 	return tkch
 }
 
-func (self *tokenizer) GetCharSlice(backoffset int, nextoffset int) (string, bool) {
+func (self *Tokenizer) GetCharSlice(backoffset int, nextoffset int) (string, bool) {
 	back_pos, next_pos := 0, 0
 	for i := 0; i < backoffset; i++ {
 		_, width := utf8.DecodeLastRuneInString((*self.input)[:self.parser_pos])
@@ -119,7 +119,7 @@ func (self *tokenizer) GetCharSlice(backoffset int, nextoffset int) (string, boo
 	return (*self.input)[self.parser_pos-back_pos : self.parser_pos+next_pos], false
 }
 
-func (self *tokenizer) getNextToken() (string, string) {
+func (self *Tokenizer) getNextToken() (string, string) {
 	defer func() { self.tokens_parsed++ }()
 
 	whitespace_on_this_line := make([]string, 0)
@@ -366,7 +366,7 @@ func (self *tokenizer) getNextToken() (string, string) {
 						esc1 = 0
 					}
 					if esc1 >= 0x20 && esc1 <= 0x7e {
-						esc1c := string(esc1)
+						esc1c := strconv.FormatUint(esc1, 10)
 						resulting_string = resulting_string[:len(resulting_string)-2-esc2]
 						if esc1c == sep || esc1c == "\\" {
 							resulting_string += "\\"
@@ -488,8 +488,8 @@ func GetLineStarters() []string {
 	return line_starters
 }
 
-func New(s *string, options optargs.MapType, indent_string string) *tokenizer {
-	t := new(tokenizer)
+func New(s *string, options optargs.MapType, indent_string string) *Tokenizer {
+	t := new(Tokenizer)
 	t.input = s
 	t.options = options
 	t.indent_string = indent_string

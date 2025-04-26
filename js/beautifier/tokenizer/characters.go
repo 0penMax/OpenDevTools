@@ -2,43 +2,43 @@ package tokenizer
 
 import "unicode/utf8"
 
-func (self *tokenizer) GetNextRune() rune {
+func (self *Tokenizer) GetNextRune() rune {
 	c, _ := utf8.DecodeRuneInString((*self.input)[self.parser_pos:])
 	return c
 }
 
-func (self *tokenizer) GetNextChar() string {
+func (self *Tokenizer) GetNextChar() string {
 	c, _ := utf8.DecodeRuneInString((*self.input)[self.parser_pos:])
 	return string(c)
 }
 
-func (self *tokenizer) GetNextCharWithWidth() (string, int) {
+func (self *Tokenizer) GetNextCharWithWidth() (string, int) {
 	c, width := utf8.DecodeRuneInString((*self.input)[self.parser_pos:])
 	return string(c), width
 }
 
-func (self *tokenizer) AdvanceNextChar() string {
+func (self *Tokenizer) AdvanceNextChar() string {
 	r, width := self.GetNextCharWithWidth()
 	self.parser_pos += width
 	return r
 }
 
-func (self *tokenizer) GetLastRune() rune {
+func (self *Tokenizer) GetLastRune() rune {
 	c, _ := utf8.DecodeLastRuneInString((*self.input)[:self.parser_pos])
 	return c
 }
 
-func (self *tokenizer) GetLastChar() string {
+func (self *Tokenizer) GetLastChar() string {
 	c, _ := utf8.DecodeLastRuneInString((*self.input)[:self.parser_pos])
 	return string(c)
 }
 
-func (self *tokenizer) GetLastCharWithWidth() (string, int) {
+func (self *Tokenizer) GetLastCharWithWidth() (string, int) {
 	c, width := utf8.DecodeLastRuneInString((*self.input)[:self.parser_pos])
 	return string(c), width
 }
 
-func (self *tokenizer) BackupChar() string {
+func (self *Tokenizer) BackupChar() string {
 	c, width := self.GetLastCharWithWidth()
 	self.parser_pos -= width
 	return string(c)

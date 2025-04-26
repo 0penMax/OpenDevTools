@@ -6,7 +6,6 @@ import (
 	"openDevTools/js/beautifier/tokenizer"
 	"openDevTools/js/beautifier/unpackers"
 	"openDevTools/js/beautifier/utils"
-	"os"
 	"strings"
 )
 
@@ -51,27 +50,27 @@ var default_options = map[string]interface{}{
 	"end_with_newline":          false,
 }
 
-var handlers = map[string]func(*jsbeautifier, *tokenizer.Token){
-	"TK_START_EXPR":     (*jsbeautifier).handle_start_expr,
-	"TK_END_EXPR":       (*jsbeautifier).handle_end_expr,
-	"TK_START_BLOCK":    (*jsbeautifier).handle_start_block,
-	"TK_END_BLOCK":      (*jsbeautifier).handle_end_block,
-	"TK_WORD":           (*jsbeautifier).handle_word,
-	"TK_RESERVED":       (*jsbeautifier).handle_word,
-	"TK_SEMICOLON":      (*jsbeautifier).handle_semicolon,
-	"TK_STRING":         (*jsbeautifier).handle_string,
-	"TK_EQUALS":         (*jsbeautifier).handle_equals,
-	"TK_OPERATOR":       (*jsbeautifier).handle_operator,
-	"TK_COMMA":          (*jsbeautifier).handle_comma,
-	"TK_BLOCK_COMMENT":  (*jsbeautifier).handle_block_comment,
-	"TK_INLINE_COMMENT": (*jsbeautifier).handle_inline_comment,
-	"TK_COMMENT":        (*jsbeautifier).handle_comment,
-	"TK_DOT":            (*jsbeautifier).handle_dot,
-	"TK_UNKNOWN":        (*jsbeautifier).handle_unknown,
-	"TK_EOF":            (*jsbeautifier).handle_eof,
+var handlers = map[string]func(*Jsbeautifier, *tokenizer.Token){
+	"TK_START_EXPR":     (*Jsbeautifier).handle_start_expr,
+	"TK_END_EXPR":       (*Jsbeautifier).handle_end_expr,
+	"TK_START_BLOCK":    (*Jsbeautifier).handle_start_block,
+	"TK_END_BLOCK":      (*Jsbeautifier).handle_end_block,
+	"TK_WORD":           (*Jsbeautifier).handle_word,
+	"TK_RESERVED":       (*Jsbeautifier).handle_word,
+	"TK_SEMICOLON":      (*Jsbeautifier).handle_semicolon,
+	"TK_STRING":         (*Jsbeautifier).handle_string,
+	"TK_EQUALS":         (*Jsbeautifier).handle_equals,
+	"TK_OPERATOR":       (*Jsbeautifier).handle_operator,
+	"TK_COMMA":          (*Jsbeautifier).handle_comma,
+	"TK_BLOCK_COMMENT":  (*Jsbeautifier).handle_block_comment,
+	"TK_INLINE_COMMENT": (*Jsbeautifier).handle_inline_comment,
+	"TK_COMMENT":        (*Jsbeautifier).handle_comment,
+	"TK_DOT":            (*Jsbeautifier).handle_dot,
+	"TK_UNKNOWN":        (*Jsbeautifier).handle_unknown,
+	"TK_EOF":            (*Jsbeautifier).handle_eof,
 }
 
-type jsbeautifier struct {
+type Jsbeautifier struct {
 	flags            *Flags
 	previous_flags   *Flags
 	flag_store       []Flags
@@ -100,11 +99,11 @@ const (
 	Expression
 )
 
-func (self *jsbeautifier) unpack(s *string, eval_code bool) *string {
+func (self *Jsbeautifier) unpack(s *string, _ bool) *string {
 	return unpackers.Run(s)
 }
 
-func (self *jsbeautifier) beautify(s *string) (string, error) {
+func (self *Jsbeautifier) beautify(s *string) (string, error) {
 
 	if !utils.InStrArray(self.options["brace_style"].(string), []string{"expand", "collapse", "end-expand", "none"}) {
 		return "", errors.New("opts.brace-style must be \"expand\", \"collapse\", \"end-exapnd\", or \"none\".")
@@ -134,7 +133,7 @@ func (self *jsbeautifier) beautify(s *string) (string, error) {
 	return sweet_code, nil
 }
 
-func (self *jsbeautifier) parse_token(t tokenizer.Token) {
+func (self *Jsbeautifier) parse_token(t tokenizer.Token) {
 	for _, comment_token := range t.CommentsBefore() {
 		self.handle_token(&comment_token)
 	}
@@ -146,7 +145,7 @@ func (self *jsbeautifier) parse_token(t tokenizer.Token) {
 	self.token_pos++
 }
 
-func (self *jsbeautifier) handle_token(t *tokenizer.Token) {
+func (self *Jsbeautifier) handle_token(t *tokenizer.Token) {
 
 	newlines := t.NewLines()
 	keep_whitespace := self.options["keep_array_indentation"].(bool) && self.is_array(self.flags.mode)
@@ -172,19 +171,19 @@ func (self *jsbeautifier) handle_token(t *tokenizer.Token) {
 
 }
 
-func (self *jsbeautifier) is_special_word(s string) bool {
+func (self *Jsbeautifier) is_special_word(s string) bool {
 	return utils.InStrArray(s, []string{"case", "return", "do", "if", "throw", "else"})
 }
 
-func (self *jsbeautifier) is_array(mode Mode) bool {
+func (self *Jsbeautifier) is_array(mode Mode) bool {
 	return mode == ArrayLiteral
 }
 
-func (self *jsbeautifier) is_expression(mode Mode) bool {
+func (self *Jsbeautifier) is_expression(mode Mode) bool {
 	return mode == Expression || mode == ForInitializer || mode == Conditional
 }
 
-func (self *jsbeautifier) allow_wrap_or_preserved_newline(current_token tokenizer.Token, force_linewrap bool) {
+func (self *Jsbeautifier) allow_wrap_or_preserved_newline(current_token tokenizer.Token, force_linewrap bool) {
 
 	if self.output.just_added_newline() {
 		return
@@ -205,7 +204,7 @@ func (self *jsbeautifier) allow_wrap_or_preserved_newline(current_token tokenize
 	}
 }
 
-func (self *jsbeautifier) print_newline(force_newline bool, preserve_satatement_flags bool) {
+func (self *Jsbeautifier) print_newline(force_newline bool, preserve_satatement_flags bool) {
 	if !preserve_satatement_flags {
 
 		if self.flags.last_text != ";" && self.flags.last_text != "," && self.flags.last_text != "=" && self.last_type != "TK_OPERATOR" {
@@ -220,7 +219,7 @@ func (self *jsbeautifier) print_newline(force_newline bool, preserve_satatement_
 	}
 }
 
-func (self *jsbeautifier) print_token_line_indentation(current_token tokenizer.Token) {
+func (self *Jsbeautifier) print_token_line_indentation(current_token tokenizer.Token) {
 
 	if self.output.just_added_newline() {
 		line := self.output.current_line
@@ -234,7 +233,7 @@ func (self *jsbeautifier) print_token_line_indentation(current_token tokenizer.T
 
 }
 
-func (self *jsbeautifier) print_token(current_token tokenizer.Token, s string) {
+func (self *Jsbeautifier) print_token(current_token tokenizer.Token, s string) {
 	if s == "" {
 		s = current_token.Text()
 	}
@@ -242,18 +241,18 @@ func (self *jsbeautifier) print_token(current_token tokenizer.Token, s string) {
 	self.output.add_token(s)
 }
 
-func (self *jsbeautifier) indent() {
+func (self *Jsbeautifier) indent() {
 	self.flags.indentation_level += 1
 }
 
-func (self *jsbeautifier) deindent() {
+func (self *Jsbeautifier) deindent() {
 	allow_deindent := self.flags.indentation_level > 0 && ((self.flags.parent == nil) || self.flags.indentation_level > self.flags.parent.indentation_level)
 	if allow_deindent {
 		self.flags.indentation_level -= 1
 	}
 }
 
-func (self *jsbeautifier) set_mode(mode Mode) {
+func (self *Jsbeautifier) set_mode(mode Mode) {
 	if self.flags != nil {
 		self.flag_store = append(self.flag_store, *self.flags)
 		self.previous_flags = self.flags
@@ -267,7 +266,7 @@ func (self *jsbeautifier) set_mode(mode Mode) {
 	self.flags.start_line_index = self.output.get_line_number()
 }
 
-func (self *jsbeautifier) restore_mode() {
+func (self *Jsbeautifier) restore_mode() {
 	if len(self.flag_store) > 0 {
 		self.previous_flags = self.flags
 
@@ -280,11 +279,11 @@ func (self *jsbeautifier) restore_mode() {
 	}
 }
 
-func (self *jsbeautifier) start_of_object_property() bool {
+func (self *Jsbeautifier) start_of_object_property() bool {
 	return self.flags.parent.mode == ObjectLiteral && self.flags.mode == Statement && ((self.flags.last_text == ":" && self.flags.ternary_depth == 0) || (self.last_type == "TK_RESERVED" && (self.flags.last_text == "get" || self.flags.last_text == "set")))
 }
 
-func (self *jsbeautifier) start_of_statement(current_token tokenizer.Token) bool {
+func (self *Jsbeautifier) start_of_statement(current_token tokenizer.Token) bool {
 
 	if (self.last_type == "TK_RESERVED" && utils.InStrArray(self.flags.last_text, []string{"var", "let", "const"}) && current_token.Type() == "TK_WORD") || (self.last_type == "TK_RESERVED" && self.flags.last_text == "do") || (self.last_type == "TK_RESERVED" && self.flags.last_text == "return" && !current_token.WantedNewLine()) || (self.last_type == "TK_RESERVED" && self.flags.last_text == "else" && !(current_token.Type() == "TK_RESERVED" && current_token.Text() == "if")) || (self.last_type == "TK_END_EXPR" && (self.previous_flags.mode == ForInitializer || self.previous_flags.mode == Conditional)) || (self.last_type == "TK_WORD" && self.flags.mode == BlockStatement && !self.flags.in_case && !(current_token.Text() == "--" || current_token.Text() == "++") && current_token.Type() != "TK_WORD" && current_token.Type() != "TK_RESERVED") || (self.flags.mode == ObjectLiteral && ((self.flags.last_text == ":" && self.flags.ternary_depth == 0) || (self.last_type == "TK_RESERVED" && utils.InStrArray(self.flags.last_text, []string{"get", "set"})))) {
 
@@ -304,7 +303,7 @@ func (self *jsbeautifier) start_of_statement(current_token tokenizer.Token) bool
 	}
 }
 
-func (self *jsbeautifier) get_token() (tokenizer.Token, bool) {
+func (self *Jsbeautifier) get_token() (tokenizer.Token, bool) {
 	token, more := <-self.tkch
 
 	if more {
@@ -314,7 +313,7 @@ func (self *jsbeautifier) get_token() (tokenizer.Token, bool) {
 	return token, more
 }
 
-func (self *jsbeautifier) handle_start_expr(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_start_expr(current_token *tokenizer.Token) {
 	if self.start_of_statement(*current_token) {
 
 	}
@@ -380,7 +379,7 @@ func (self *jsbeautifier) handle_start_expr(current_token *tokenizer.Token) {
 	self.indent()
 }
 
-func (self *jsbeautifier) handle_start_block(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_start_block(current_token *tokenizer.Token) {
 	next_token, nmore := self.get_token()
 	second_token, smore := self.get_token()
 	if smore && ((second_token.Text() == ":" && utils.InStrArray(next_token.Type(), []string{"TK_STRING", "TK_WORD", "TK_RESERVED"})) || (utils.InStrArray(next_token.Text(), []string{"get", "set"}) && utils.InStrArray(second_token.Type(), []string{"TK_WORD", "TK_RESE$RVED"}))) {
@@ -424,7 +423,7 @@ func (self *jsbeautifier) handle_start_block(current_token *tokenizer.Token) {
 	self.indent()
 }
 
-func (self *jsbeautifier) handle_end_expr(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_end_expr(current_token *tokenizer.Token) {
 	for self.flags.mode == Statement {
 		self.restore_mode()
 	}
@@ -459,7 +458,7 @@ func (self *jsbeautifier) handle_end_expr(current_token *tokenizer.Token) {
 	}
 }
 
-func (self *jsbeautifier) handle_end_block(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_end_block(current_token *tokenizer.Token) {
 	for self.flags.mode == Statement {
 		self.restore_mode()
 	}
@@ -486,7 +485,7 @@ func (self *jsbeautifier) handle_end_block(current_token *tokenizer.Token) {
 	self.print_token(*current_token, "")
 }
 
-func (self *jsbeautifier) handle_word(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_word(current_token *tokenizer.Token) {
 
 	if current_token.Type() == "TK_RESERVED" && self.flags.mode != ObjectLiteral && (current_token.Text() == "set" || current_token.Text() == "get") {
 		current_token.SetType("TK_WORD")
@@ -662,7 +661,7 @@ func (self *jsbeautifier) handle_word(current_token *tokenizer.Token) {
 
 }
 
-func (self *jsbeautifier) handle_semicolon(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_semicolon(current_token *tokenizer.Token) {
 	if self.start_of_statement(*current_token) {
 		self.output.space_before_token = false
 	}
@@ -673,7 +672,7 @@ func (self *jsbeautifier) handle_semicolon(current_token *tokenizer.Token) {
 	self.print_token(*current_token, "")
 }
 
-func (self *jsbeautifier) handle_string(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_string(current_token *tokenizer.Token) {
 	if self.start_of_statement(*current_token) {
 		self.output.space_before_token = true
 	} else if self.last_type == "TK_RESERVED" || self.last_type == "TK_WORD" {
@@ -689,7 +688,7 @@ func (self *jsbeautifier) handle_string(current_token *tokenizer.Token) {
 	self.print_token(*current_token, "")
 }
 
-func (self *jsbeautifier) handle_equals(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_equals(current_token *tokenizer.Token) {
 	if self.start_of_statement(*current_token) {
 
 	}
@@ -703,7 +702,7 @@ func (self *jsbeautifier) handle_equals(current_token *tokenizer.Token) {
 	self.output.space_before_token = true
 }
 
-func (self *jsbeautifier) handle_comma(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_comma(current_token *tokenizer.Token) {
 	if self.flags.declaration_statement {
 		if self.is_expression(self.flags.parent.mode) {
 			self.flags.declaration_assignment = false
@@ -733,7 +732,7 @@ func (self *jsbeautifier) handle_comma(current_token *tokenizer.Token) {
 	}
 }
 
-func (self *jsbeautifier) handle_operator(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_operator(current_token *tokenizer.Token) {
 	if self.start_of_statement(*current_token) {
 
 	}
@@ -815,7 +814,7 @@ func (self *jsbeautifier) handle_operator(current_token *tokenizer.Token) {
 	}
 }
 
-func (self *jsbeautifier) handle_block_comment(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_block_comment(current_token *tokenizer.Token) {
 	lines := strings.Split(strings.Replace(current_token.Text(), "\x0d", "", -1), "\x0a")
 
 	javadoc := true
@@ -862,13 +861,13 @@ func (self *jsbeautifier) handle_block_comment(current_token *tokenizer.Token) {
 	self.print_newline(false, true)
 }
 
-func (self *jsbeautifier) handle_inline_comment(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_inline_comment(current_token *tokenizer.Token) {
 	self.output.space_before_token = true
 	self.print_token(*current_token, "")
 	self.output.space_before_token = true
 }
 
-func (self *jsbeautifier) handle_comment(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_comment(current_token *tokenizer.Token) {
 	if current_token.WantedNewLine() {
 		self.print_newline(false, true)
 	}
@@ -881,7 +880,7 @@ func (self *jsbeautifier) handle_comment(current_token *tokenizer.Token) {
 	self.print_newline(false, true)
 }
 
-func (self *jsbeautifier) handle_dot(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_dot(current_token *tokenizer.Token) {
 	if self.start_of_statement(*current_token) {
 	}
 
@@ -893,20 +892,20 @@ func (self *jsbeautifier) handle_dot(current_token *tokenizer.Token) {
 	self.print_token(*current_token, "")
 }
 
-func (self *jsbeautifier) handle_unknown(current_token *tokenizer.Token) {
+func (self *Jsbeautifier) handle_unknown(current_token *tokenizer.Token) {
 	self.print_token(*current_token, "")
 	if current_token.Text()[len(current_token.Text())-1:] == "\n" {
 		self.print_newline(false, false)
 	}
 }
 
-func (self *jsbeautifier) handle_eof(_ *tokenizer.Token) {
+func (self *Jsbeautifier) handle_eof(_ *tokenizer.Token) {
 	for self.flags.mode == Statement {
 		self.restore_mode()
 	}
 }
 
-func (self *jsbeautifier) blank_state(s *string) *string {
+func (self *Jsbeautifier) blank_state(s *string) *string {
 	if self.options["jslint_happy"].(bool) {
 		self.options["space_after_anon_function"] = true
 	}
@@ -946,8 +945,8 @@ func (self *jsbeautifier) blank_state(s *string) *string {
 func DefaultOptions() map[string]interface{} {
 	return default_options
 }
-func New(options optargs.MapType) *jsbeautifier {
-	b := new(jsbeautifier)
+func New(options optargs.MapType) *Jsbeautifier {
+	b := new(Jsbeautifier)
 
 	b.options.Copy(options)
 	b.blank_state(nil)
@@ -957,15 +956,4 @@ func New(options optargs.MapType) *jsbeautifier {
 func Beautify(data *string, options optargs.MapType) (string, error) {
 	b := New(options)
 	return b.beautify(data)
-}
-
-func BeautifyFile(file string, options optargs.MapType) *string {
-	if file == "-" {
-		panic("Reading stdin not implemented yet")
-	}
-
-	data, _ := os.ReadFile(file)
-	sdata := string(data)
-	val, _ := Beautify(&sdata, options)
-	return &val
 }

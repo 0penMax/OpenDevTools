@@ -31,8 +31,8 @@ type Output struct {
 	indent_cache       []string
 	baseIndentLength   int
 	indent_length      int
-	lines              []*outputline
-	current_line       *outputline
+	lines              []*Outputline
+	current_line       *Outputline
 	space_before_token bool
 }
 

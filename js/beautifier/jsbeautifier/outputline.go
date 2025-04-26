@@ -22,7 +22,7 @@ import "strings"
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-type outputline struct {
+type Outputline struct {
 	parent          *Output
 	character_count int
 	indent_count    int
@@ -30,20 +30,20 @@ type outputline struct {
 	empty           bool
 }
 
-func (self *outputline) get_character_count() int {
+func (self *Outputline) get_character_count() int {
 	return self.character_count
 }
 
-func (self *outputline) is_empty() bool {
+func (self *Outputline) is_empty() bool {
 	return self.empty
 }
 
-func (self *outputline) set_indent(level int) {
+func (self *Outputline) set_indent(level int) {
 	self.character_count = self.parent.baseIndentLength + level*self.parent.indent_length
 	self.indent_count = level
 }
 
-func (self *outputline) last() string {
+func (self *Outputline) last() string {
 	if !self.is_empty() {
 		return self.items[len(self.items)-1]
 	} else {
@@ -51,20 +51,20 @@ func (self *outputline) last() string {
 	}
 }
 
-func (self *outputline) push(input string) {
+func (self *Outputline) push(input string) {
 	self.items = append(self.items, input)
 	self.character_count += len(input)
 	self.empty = false
 }
 
-func (self *outputline) remove_indent() {
+func (self *Outputline) remove_indent() {
 	if self.indent_count > 0 {
 		self.indent_count -= 1
 		self.character_count -= self.parent.indent_length
 	}
 }
 
-func (self *outputline) trim() {
+func (self *Outputline) trim() {
 	for self.last() == " " {
 		self.items = self.items[:len(self.items)-1]
 
@@ -73,7 +73,7 @@ func (self *outputline) trim() {
 	self.empty = len(self.items) == 0
 }
 
-func (self *outputline) String() string {
+func (self *Outputline) String() string {
 	result := ""
 	if !self.is_empty() {
 		if self.indent_count >= 0 {
@@ -84,6 +84,6 @@ func (self *outputline) String() string {
 	return result
 }
 
-func NewLine(parent *Output) *outputline {
-	return &outputline{parent, 0, -1, make([]string, 0), true}
+func NewLine(parent *Output) *Outputline {
+	return &Outputline{parent, 0, -1, make([]string, 0), true}
 }
