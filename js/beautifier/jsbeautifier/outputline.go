@@ -23,7 +23,7 @@ import "strings"
 // SOFTWARE.
 
 type outputline struct {
-	parent          *output
+	parent          *Output
 	character_count int
 	indent_count    int
 	items           []string
@@ -84,6 +84,6 @@ func (self *outputline) String() string {
 	return result
 }
 
-func NewLine(parent *output) *outputline {
+func NewLine(parent *Output) *outputline {
 	return &outputline{parent, 0, -1, make([]string, 0), true}
 }

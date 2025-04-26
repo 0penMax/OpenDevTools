@@ -147,7 +147,7 @@ func reverse(s string) string {
 }
 
 func pow(a, b int) int {
-	var result int = 1
+	var result = 1
 
 	for 0 != b {
 		if 0 != (b & 1) {

@@ -25,7 +25,7 @@ import (
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-type output struct {
+type Output struct {
 	indent_string      string
 	baseIndentString   string
 	indent_cache       []string
@@ -36,11 +36,11 @@ type output struct {
 	space_before_token bool
 }
 
-func (self *output) get_line_number() int {
+func (self *Output) get_line_number() int {
 	return len(self.lines)
 }
 
-func (self *output) add_new_line(force_new_line bool) bool {
+func (self *Output) add_new_line(force_new_line bool) bool {
 
 	if len(self.lines) == 1 && self.just_added_newline() {
 		return false
@@ -55,7 +55,7 @@ func (self *output) add_new_line(force_new_line bool) bool {
 	return false
 }
 
-func (self *output) get_code() string {
+func (self *Output) get_code() string {
 	sweet_code := ""
 
 	for _, line := range self.lines {
@@ -66,13 +66,13 @@ func (self *output) get_code() string {
 	return string(re.ReplaceAll([]byte(sweet_code), []byte("")))
 }
 
-func (self *output) PrintLines() {
+func (self *Output) PrintLines() {
 	for _, val := range self.lines {
 		fmt.Println("Line: ", val, " len: ", val.get_character_count())
 	}
 }
 
-func (self *output) set_indent(level int) bool {
+func (self *Output) set_indent(level int) bool {
 
 	if len(self.lines) > 1 {
 		for level >= len(self.indent_cache) {
@@ -86,19 +86,19 @@ func (self *output) set_indent(level int) bool {
 	return false
 }
 
-func (self *output) add_token(printable_token string) {
+func (self *Output) add_token(printable_token string) {
 	self.add_space_before_token()
 	self.current_line.push(printable_token)
 }
 
-func (self *output) add_space_before_token() {
+func (self *Output) add_space_before_token() {
 	if self.space_before_token && !self.just_added_newline() {
 		self.current_line.push(" ")
 	}
 	self.space_before_token = false
 }
 
-func (self *output) remove_redundant_indentation(frame Flags) {
+func (self *Output) remove_redundant_indentation(frame Flags) {
 	if frame.multiline_frame || frame.mode == ForInitializer || frame.mode == Conditional {
 		return
 	}
@@ -110,7 +110,7 @@ func (self *output) remove_redundant_indentation(frame Flags) {
 	}
 }
 
-func (self *output) trim(eat_newlines bool) {
+func (self *Output) trim(eat_newlines bool) {
 	self.current_line.trim()
 
 	for eat_newlines && len(self.lines) > 1 && self.current_line.is_empty() {
@@ -119,11 +119,11 @@ func (self *output) trim(eat_newlines bool) {
 		self.current_line.trim()
 	}
 }
-func (self *output) just_added_newline() bool {
+func (self *Output) just_added_newline() bool {
 	return self.current_line.is_empty()
 }
 
-func (self *output) just_added_blankline() bool {
+func (self *Output) just_added_blankline() bool {
 	if self.just_added_newline() {
 		if len(self.lines) == 1 {
 			return true
@@ -136,8 +136,8 @@ func (self *output) just_added_blankline() bool {
 	return false
 }
 
-func NewOutput(indent_string string, baseIndentString string) *output {
-	output := new(output)
+func NewOutput(indent_string string, baseIndentString string) *Output {
+	output := new(Output)
 	output.indent_string = indent_string
 	output.baseIndentString = baseIndentString
 	output.indent_length = len(indent_string)

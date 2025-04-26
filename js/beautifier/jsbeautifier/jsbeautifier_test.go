@@ -1,6 +1,7 @@
 package jsbeautifier
 
 import (
+	"openDevTools/js/beautifier/optargs"
 	"testing"
 )
 
@@ -1029,7 +1030,7 @@ func TestBeautifier(t *testing.T) {
 	test_options["break_chained_methods"] = false
 	test_options["preserve_newlines"] = false
 
-	wrap_input_1 := ("foo.bar().baz().cucumber((fat && \"sassy\") || (leans\n&& mean));\n" +
+	wrap_input_1 := "foo.bar().baz().cucumber((fat && \"sassy\") || (leans\n&& mean));\n" +
 		"Test_very_long_variable_name_this_should_never_wrap\n.but_this_can\n" +
 		"if (wraps_can_occur && inside_an_if_block) that_is_\n.okay();\n" +
 		"object_literal = {\n" +
@@ -1037,9 +1038,9 @@ func TestBeautifier(t *testing.T) {
 		"    property: first_token_should_never_wrap + but_this_can,\n" +
 		"    propertz: first_token_should_never_wrap + !but_this_can,\n" +
 		"    proper: \"first_token_should_never_wrap\" + \"but_this_can\"\n" +
-		"}")
+		"}"
 
-	wrap_input_2 := ("{\n" +
+	wrap_input_2 := "{\n" +
 		"    foo.bar().baz().cucumber((fat && \"sassy\") || (leans\n&& mean));\n" +
 		"    Test_very_long_variable_name_this_should_never_wrap\n.but_this_can\n" +
 		"    if (wraps_can_occur && inside_an_if_block) that_is_\n.okay();\n" +
@@ -1049,7 +1050,7 @@ func TestBeautifier(t *testing.T) {
 		"        propertz: first_token_should_never_wrap + !but_this_can,\n" +
 		"        proper: \"first_token_should_never_wrap\" + \"but_this_can\"\n" +
 		"    }" +
-		"}")
+		"}"
 
 	test_options["preserve_newlines"] = false
 	test_options["wrap_line_length"] = 0

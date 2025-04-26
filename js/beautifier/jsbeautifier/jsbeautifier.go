@@ -2,11 +2,11 @@ package jsbeautifier
 
 import (
 	"errors"
-	"io/ioutil"
 	"openDevTools/js/beautifier/optargs"
 	"openDevTools/js/beautifier/tokenizer"
 	"openDevTools/js/beautifier/unpackers"
 	"openDevTools/js/beautifier/utils"
+	"os"
 	"strings"
 )
 
@@ -78,7 +78,7 @@ type jsbeautifier struct {
 	tokens           []string
 	token_pos        int
 	options          optargs.MapType
-	output           *output
+	output           *Output
 	last_last_text   string
 	last_type        string
 	ternary_depth    int
@@ -295,7 +295,7 @@ func (self *jsbeautifier) start_of_statement(current_token tokenizer.Token) bool
 		}
 
 		if !self.start_of_object_property() {
-			self.allow_wrap_or_preserved_newline(current_token, (current_token.Type() == "TK_RESERVED" && utils.InStrArray(current_token.Text(), []string{"do", "for", "if", "while"})))
+			self.allow_wrap_or_preserved_newline(current_token, current_token.Type() == "TK_RESERVED" && utils.InStrArray(current_token.Text(), []string{"do", "for", "if", "while"}))
 		}
 
 		return true
@@ -900,7 +900,7 @@ func (self *jsbeautifier) handle_unknown(current_token *tokenizer.Token) {
 	}
 }
 
-func (self *jsbeautifier) handle_eof(current_token *tokenizer.Token) {
+func (self *jsbeautifier) handle_eof(_ *tokenizer.Token) {
 	for self.flags.mode == Statement {
 		self.restore_mode()
 	}
@@ -964,7 +964,7 @@ func BeautifyFile(file string, options optargs.MapType) *string {
 		panic("Reading stdin not implemented yet")
 	}
 
-	data, _ := ioutil.ReadFile(file)
+	data, _ := os.ReadFile(file)
 	sdata := string(data)
 	val, _ := Beautify(&sdata, options)
 	return &val

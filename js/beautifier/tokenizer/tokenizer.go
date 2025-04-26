@@ -40,7 +40,7 @@ type tokenizer struct {
 	n_newlines              int
 	whitespace_before_token string
 	in_html_comment         bool
-	acorn                   *acorn
+	acorn                   *Acorn
 }
 
 var whitespace = [4]string{"\n", "\r", "\t", " "}
@@ -316,7 +316,7 @@ func (self *tokenizer) getNextToken() (string, string) {
 		} else if self.options["e4x"].(bool) && sep == "<" { // xml
 			xmlRegExp := regexp.MustCompile(`<(\/?)(!\[CDATA\[[\s\S]*?\]\]|[-a-zA-Z:0-9_.]+|\{[^{}]*\})\s*([-a-zA-Z:0-9_.]+=(\{[^{}]*\}|"[^"]*"|\'[^\']*\')\s*)*(\/?)\s*>`)
 			xmlStr := (*self.input)[self.parser_pos-1:]
-			match := xmlRegExp.FindStringSubmatch((xmlStr))
+			match := xmlRegExp.FindStringSubmatch(xmlStr)
 
 			if match != nil {
 				rootTag := match[2]
