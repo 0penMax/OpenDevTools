@@ -13,7 +13,7 @@ Open source offline console realization for most popular tools for developers.
 - [x] Lorem Ipsum Generator
 - [x] JWT Read
 - [x] JS Beautify
-- [ ] JS Minify
+- [x] JS Minify
 - [ ] URL Encode/Decode
 - [ ] YAML to JSON
 - [ ] JSON to YAML

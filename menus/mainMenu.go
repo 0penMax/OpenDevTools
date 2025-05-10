@@ -57,6 +57,11 @@ func ShowMainMenu() {
 	var m Menu
 
 	m.navItems = append(m.navItems, navItem{
+		name: "JS",
+		do:   showJsMenu,
+	})
+
+	m.navItems = append(m.navItems, navItem{
 		name: "Hash Generator",
 		do:   showHashMenu,
 	})
@@ -94,11 +99,6 @@ func ShowMainMenu() {
 	m.navItems = append(m.navItems, navItem{
 		name: "PGP",
 		do:   showPgpMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "JS",
-		do:   showJsMenu,
 	})
 
 	m.show()
