@@ -5,6 +5,7 @@ go 1.23.6
 require (
 	github.com/pterm/pterm v0.12.80
 	github.com/sqweek/dialog v0.0.0-20240226140203-065105509627
+	github.com/tdewolff/minify/v2 v2.23.5
 	golang.design/x/clipboard v0.7.0
 	golang.org/x/crypto v0.37.0
 )
@@ -19,6 +20,7 @@ require (
 	github.com/lithammer/fuzzysearch v1.1.8 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
+	github.com/tdewolff/parse/v2 v2.8.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/exp/shiny v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
 	golang.org/x/image v0.26.0 // indirect

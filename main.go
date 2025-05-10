@@ -7,4 +7,4 @@ func main() {
 
 }
 
-//TODO add default you want to continue
+//TODO create workflow that autotest and create binary for release
