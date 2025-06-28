@@ -1,8 +1,8 @@
 package menus
 
 import (
+	"github.com/nixinwang/dialog"
 	"github.com/pterm/pterm"
-	"github.com/sqweek/dialog"
 	"openDevTools/HashGenerator"
 	"openDevTools/models"
 )

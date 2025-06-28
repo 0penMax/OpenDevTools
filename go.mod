@@ -3,8 +3,8 @@ module openDevTools
 go 1.23.6
 
 require (
+	github.com/nixinwang/dialog v0.0.0-20240524023314-b4bad92eff4d
 	github.com/pterm/pterm v0.12.80
-	github.com/sqweek/dialog v0.0.0-20240226140203-065105509627
 	github.com/tdewolff/minify/v2 v2.23.5
 	golang.design/x/clipboard v0.7.0
 	golang.org/x/crypto v0.37.0
