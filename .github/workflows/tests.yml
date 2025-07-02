@@ -9,7 +9,6 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/tags/v*'  # Skip this job if the push is a tag that starts with "v"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
