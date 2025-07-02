@@ -23,7 +23,7 @@ jobs:
       - name: Install X11 development libraries (Linux only)
         run: |
             sudo apt update
-            sudo apt install libx11-dev      
+            sudo apt install libx11-dev libgtk-3-dev      
 
       - name: Run tests
         run: go test ./...  # Run all tests
