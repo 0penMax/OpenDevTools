@@ -20,6 +20,12 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
+      - name: Install X11 development libraries (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y libx11-dev        
+
       - name: Run tests
         run: go test ./...  # Run all tests
 
