@@ -38,7 +38,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.23'
+          go-version: '1.23.6'
 
       - name: Build project
         run: |
@@ -51,6 +51,6 @@ jobs:
         with:
           tag_name: v0.0.1
           files: |
-            myapp-${{ matrix.os }}-${{ matrix.arch }}  # Adjust the path to your binaries
+            odt-${{ matrix.os }}-${{ matrix.arch }}  # Adjust the path to your binaries
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
