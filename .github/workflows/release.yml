@@ -95,10 +95,10 @@ jobs:
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.meta.outputs.tags }}
+          tag: ${{ github.sha}}
           files: output/*
         run: |
-          gh release create ${{ steps.meta.outputs.tags }} \
+          gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
               --title="commit-$tag" \
               --generate-notes
