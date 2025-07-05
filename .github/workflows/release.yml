@@ -99,7 +99,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: "release-${{ github.sha }}"
-          files: output/*
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
