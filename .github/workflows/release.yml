@@ -84,13 +84,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
             name: linux-windows-binaries
-            path: output/*
+            path: output/
 
       - name: Download macOS Artifacts
         uses: actions/download-artifact@v4
         with:
             name: macos-binaries
-            path: output/*
+            path: output/
+
+      - name: List output directory
+        run: ls -la output/
 
       - name: Create Release
         env:
