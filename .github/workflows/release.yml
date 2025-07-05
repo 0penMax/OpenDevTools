@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  run-tests-and-build-release:
+  run_tests_build_linux_and_windows:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,29 +32,63 @@ jobs:
 
       - name: Build for linux amd64
         run: |
-          GOOS=linux GOARCH=amd64 go build -o odt-linux .
+          GOOS=linux GOARCH=amd64 go build -o output/odt-linux .
 
       - name: Build for windows amd64
         run: |
-          GOOS=windows GOARCH=amd64 go build -o odt-windows . 
+          GOOS=windows GOARCH=amd64 go build -o output/odt-windows . 
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+            path: output/*
+
+
+  build_mac_os:
+    needs: run_tests_build_linux_and_windows
+    runs-on: macos-14
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Install dependencies
+        run: go mod tidy
 
       - name: Build for macos amd64
         run: |
-          GOOS=darwin GOARCH=amd64 CGO_ENABLED=1 go build -o odt-macos . 
+          GOOS=darwin GOARCH=amd64 go build -o output/odt-macos . 
 
       - name: Build for macos ARM
         run: |
-          GOOS=darwin GOARCH=arm64 CGO_ENABLED=1 go build -o odt-macos-arm . 
+          GOOS=darwin GOARCH=arm64 go build -o output/odt-macos-arm .
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: output/*
+
+  release:
+    needs: build_mac_os
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: output/*
 
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.meta.outputs.tags }}
-          files: |
-            odt-linux
-            odt-windows
-            odt-macos
-            odt-macos-arm
+          files: output/*
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
