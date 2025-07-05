@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  run-tests:
+  run-tests-and-build-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -40,11 +40,11 @@ jobs:
 
       - name: Build for macos amd64
         run: |
-          GOOS=darwin GOARCH=amd64 go build -o odt-macos . 
+          GOOS=darwin GOARCH=amd64 CGO_ENABLED=1 go build -o odt-macos . 
 
       - name: Build for macos ARM
         run: |
-          GOOS=darwin GOARCH=arm64 go build -o odt-macos-arm . 
+          GOOS=darwin GOARCH=arm64 CGO_ENABLED=1 go build -o odt-macos-arm . 
 
       - name: Create Release
         env:
