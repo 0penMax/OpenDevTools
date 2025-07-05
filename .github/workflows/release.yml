@@ -104,4 +104,5 @@ jobs:
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
               --title="commit-$tag" \
-              --generate-notes
+              --generate-notes \
+              output/*
