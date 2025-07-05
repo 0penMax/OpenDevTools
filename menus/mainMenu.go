@@ -48,11 +48,12 @@ func (m *Menu) show() {
 func ShowMainMenu() {
 	ClearScreen()
 	pterm.Println()
-	// Generate BigLetters and store in 's'
-	s, _ := pterm.DefaultBigText.WithLetters(putils.LettersFromString("Open Dev Utils")).Srender()
-	// Print the BigLetters 's' centered in the terminal
-	pterm.DefaultCenter.Println(s)
-	// Print a block of text centered in the terminal
+	width := pterm.GetTerminalWidth()
+	if width >= 115 {
+		_ = pterm.DefaultBigText.WithLetters(putils.LettersFromString("OPEN DEV TOOLS")).Render()
+	} else {
+		_ = pterm.DefaultBigText.WithLetters(putils.LettersFromString("ODT")).Render()
+	}
 
 	var m Menu
 
