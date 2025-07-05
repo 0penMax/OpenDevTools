@@ -61,11 +61,11 @@ jobs:
 
       - name: Build for macos amd64
         run: |
-          GOOS=darwin GOARCH=amd64 go build -o output/odt-macos . 
+          GOOS=darwin GOARCH=amd64 CGO_ENABLED=1 go build -o output/odt-macos . 
 
       - name: Build for macos ARM
         run: |
-          GOOS=darwin GOARCH=arm64 go build -o output/odt-macos-arm .
+          GOOS=darwin GOARCH=arm64 CGO_ENABLED=1 go build -o output/odt-macos-arm .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
