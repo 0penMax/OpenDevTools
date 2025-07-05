@@ -1,73 +1,62 @@
-# TODO fix that creating multiple releases on one run with tag master
+name: Create release
 
-#name: Create release
-#
-#on:
-#  push:
-#    branches:
-#      - master
-#permissions:
-#  contents: write
-#
-#jobs:
-#  run-tests:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v4
-#        with:
-#          go-version: '1.23'
-#
-#      - name: Install dependencies
-#        run: go mod tidy
-#
-#      - name: Install X11 and GTK3 development libraries
-#        run: |
-#          sudo apt update
-#          sudo apt install libx11-dev libgtk-3-dev
-#
-#      - name: Run tests
-#        run: go test ./...  # Run all tests
-#
-#  release:
-#    runs-on: ${{ matrix.os }}
-#    needs: run-tests
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        arch: [ amd64, arm64 ]
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v4
-#        with:
-#          go-version: '1.23'
-#      - name: Install  X11 and GTK3 development libraries (Linux only)
-#        if: matrix.os == 'ubuntu-latest'
-#        run: |
-#          sudo apt update
-#          sudo apt install libx11-dev libgtk-3-dev
-#
-#      - name: Build project
-#        run: |
-#          GOOS=${{ matrix.os == 'windows-latest' && 'windows' || matrix.os == 'macos-latest' && 'darwin' || 'linux' }}
-#          GOARCH=${{ matrix.arch }}
-#          go build -o odt-${{ matrix.os }}-${{ matrix.arch }} .  # Adjust the output name as needed
-#
-#      - name: Create Release
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          tag: ${{ github.ref_name }}
-#          files: |
-#            odt-${{ matrix.os }}-${{ matrix.arch }}  # Adjust the path to your binaries
-#        run: |
-#          gh release create "$tag" \
-#              --repo="$GITHUB_REPOSITORY" \
-#              --title="commit-${{ github.sha}}" \
-#              --generate-notes
+on:
+  push:
+    branches:
+      - master
+permissions:
+  contents: write
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Install X11 and GTK3 development libraries
+        run: |
+          sudo apt update
+          sudo apt install libx11-dev libgtk-3-dev
+
+      - name: Run tests
+        run: go test ./...  # Run all tests
+
+      - name: Build for linux amd64
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o odt-linux .
+
+      - name: Build for windows amd64
+        run: |
+          GOOS=windows GOARCH=amd64 go build -o odt-windows . 
+
+      - name: Build for macos amd64
+        run: |
+          GOOS=darwin GOARCH=amd64 go build -o odt-macos . 
+
+      - name: Build for macos ARM
+        run: |
+          GOOS=darwin GOARCH=arm64 go build -o odt-macos-arm . 
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.meta.outputs.tags }}
+          files: |
+            odt-linux
+            odt-windows
+            odt-macos
+            odt-macos-arm
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="commit-$tag" \
+              --generate-notes
