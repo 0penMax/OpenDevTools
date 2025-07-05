@@ -41,8 +41,8 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
+            name: linux-windows-binaries
             path: output/*
-
 
   build_mac_os:
     needs: run_tests_build_linux_and_windows
@@ -70,7 +70,8 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: output/*
+            name: macos-binaries
+            path: output/*
 
   release:
     needs: build_mac_os
@@ -79,10 +80,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Artifacts
+      - name: Download Linux and Windows Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: output/*
+            name: linux-windows-binaries
+            path: output/*
+
+      - name: Download macOS Artifacts
+        uses: actions/download-artifact@v4
+        with:
+            name: macos-binaries
+            path: output/*
 
       - name: Create Release
         env:
