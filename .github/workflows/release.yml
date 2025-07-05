@@ -98,7 +98,7 @@ jobs:
           tag: ${{ steps.meta.outputs.tags }}
           files: output/*
         run: |
-          gh release create "$tag" \
+          gh release create ${{ steps.meta.outputs.tags }} \
               --repo="$GITHUB_REPOSITORY" \
               --title="commit-$tag" \
               --generate-notes
