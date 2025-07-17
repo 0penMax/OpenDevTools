@@ -102,6 +102,11 @@ func ShowMainMenu() {
 		do:   showPgpMenu,
 	})
 
+	m.navItems = append(m.navItems, navItem{
+		name: "Unicode string",
+		do:   showUnicodeDEMenu,
+	})
+
 	m.show()
 	showDoYouWant2Continue()
 }
