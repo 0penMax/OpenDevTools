@@ -14,6 +14,7 @@ Open source offline console realization for most popular tools for developers.
 - [x] JWT Read
 - [x] JS Beautify
 - [x] JS Minify
+- [x] Encode/decode unicode string
 - [ ] URL Encode/Decode
 - [ ] YAML to JSON
 - [ ] JSON to YAML
