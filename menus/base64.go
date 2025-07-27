@@ -1,7 +1,6 @@
 package menus
 
 import (
-	"github.com/pterm/pterm"
 	"openDevTools/base64"
 )
 
@@ -10,7 +9,7 @@ func showBase64StringMenu() {
 	var m Menu
 
 	m.title = "Base64 string"
-	m.desc = "Encode/decode base64  string."
+	m.desc = "Encode/decode base64 string."
 
 	m.navItems = append(m.navItems, navItem{
 		name: "Encode",
@@ -26,43 +25,12 @@ func showBase64StringMenu() {
 }
 
 func showBase64EncodeDialog() {
-	ClearScreen()
-	pterm.Info.Println("Used RawURLEncoding.")
-
-	//pterm.Println("Write your date in format - dd/mm/yyyy hh:mm:ss")
-	textInput := pterm.DefaultInteractiveTextInput
-
-	// Show the text input to the user and store the result.
-	// The second return value (an error) is ignored with '_'.
-	text, _ := textInput.Show()
-
-	// Print a blank line for better readability in the output.
-	pterm.Println()
-
-	r := base64.Encode(text)
-
-	pterm.Println(r)
-
+	showInputMenu(nilErrorWrapper(base64.Encode))
 }
 
 func showBase64DecodeDialog() {
-	ClearScreen()
-
-	pterm.Println("Write your unixtime:")
-	textInput := pterm.DefaultInteractiveTextInput
-
-	// Show the text input to the user and store the result.
-	// The second return value (an error) is ignored with '_'.
-	text, _ := textInput.Show()
-
-	// Print a blank line for better readability in the output.
-	pterm.Println()
-
-	r, err := base64.Decode(text)
-	if err != nil {
-		pterm.Error.Println(err)
-		return
-	}
-	pterm.Println(string(r))
-
+	showInputMenu(func(s string) (string, error) {
+		b, err := base64.Decode(s)
+		return string(b), err
+	})
 }

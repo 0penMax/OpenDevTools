@@ -1,8 +1,6 @@
 package menus
 
 import (
-	"github.com/pterm/pterm"
-	"golang.design/x/clipboard"
 	"openDevTools/unicode"
 )
 
@@ -11,7 +9,7 @@ func showUnicodeDEMenu() {
 	var m Menu
 
 	m.title = "Unicode Decode/encode"
-	m.desc = "Encode/decode unicode string from clipboard."
+	m.desc = "Encode/decode unicode string."
 
 	m.navItems = append(m.navItems, navItem{
 		name: "Encode",
@@ -27,31 +25,9 @@ func showUnicodeDEMenu() {
 }
 
 func showUnicodeDecodeDialog() {
-	ClearScreen()
-	pterm.Info.Println("Read from clipboard")
-	clipboardText := clipboard.Read(clipboard.FmtText)
-
-	r, err := unicode.DecodeUnicode(string(clipboardText))
-	if err != nil {
-		pterm.Warning.Println(err)
-		return
-	}
-
-	clipboard.Write(clipboard.FmtText, []byte(r))
-
-	pterm.Info.Println("Result copied to clipboard")
+	showInputMenu(unicode.DecodeUnicode)
 }
 
 func showUnicodeEncodeDialog() {
-	ClearScreen()
-
-	pterm.Info.Println("Read from clipboard")
-	clipboardText := clipboard.Read(clipboard.FmtText)
-
-	r := unicode.EncodeToUnicode(string(clipboardText))
-
-	clipboard.Write(clipboard.FmtText, []byte(r))
-
-	pterm.Info.Println("Result copied to clipboard")
-
+	showInputMenu(nilErrorWrapper(unicode.EncodeToUnicode))
 }
