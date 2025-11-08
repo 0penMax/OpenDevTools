@@ -1,11 +1,14 @@
 package menus
 
 import (
-	"github.com/pterm/pterm"
-	"github.com/pterm/pterm/putils"
+	"flag"
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
+
+	"github.com/pterm/pterm"
+	"github.com/pterm/pterm/putils"
 )
 
 type Menu struct {
@@ -45,6 +48,98 @@ func (m *Menu) show() {
 
 }
 
+var mm Menu
+
+func ProcessShortcuts() bool {
+
+	// maps for lookup
+	nameToHandler := make(map[string]func())
+	flags := make(map[string]*bool)
+
+	for _, it := range mm.navItems {
+		n := buildShortName(it.name)
+		nameToHandler[n] = it.do
+		flags[n] = flag.Bool(n, false, "Run "+it.name+" menu")
+	}
+
+	flag.Parse()
+
+	// search for fist lags
+	for n, ptr := range flags {
+		if ptr != nil && *ptr {
+			nameToHandler[n]()
+			return true
+		}
+	}
+	return false
+}
+
+func buildShortName(fullName string) string {
+	fullName = strings.ToLower(fullName)
+	if len(fullName) < 4 {
+		return fullName
+	}
+	words := strings.Split(fullName, " ")
+	name := ""
+	for _, word := range words {
+		name += string(word[0])
+	}
+	return name
+}
+
+func BuildMenu() {
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "JS",
+		do:   showJsMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "Hash Generator",
+		do:   showHashMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "Unixtime",
+		do:   showUnixTimeMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "Base64 string",
+		do:   showBase64StringMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "Base64 image",
+		do:   showBase64ImgMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "Color convertor",
+		do:   showColorTransformMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "lorem generator",
+		do:   showLoremMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "JWT",
+		do:   showJwtMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "PGP",
+		do:   showPgpMenu,
+	})
+
+	mm.navItems = append(mm.navItems, navItem{
+		name: "Unicode string",
+		do:   showUnicodeDEMenu,
+	})
+}
+
 func ShowMainMenu() {
 	ClearScreen()
 	pterm.Println()
@@ -55,59 +150,7 @@ func ShowMainMenu() {
 		_ = pterm.DefaultBigText.WithLetters(putils.LettersFromString("ODT")).Render()
 	}
 
-	var m Menu
-
-	m.navItems = append(m.navItems, navItem{
-		name: "JS",
-		do:   showJsMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Hash Generator",
-		do:   showHashMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Unixtime",
-		do:   showUnixTimeMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Base64 string",
-		do:   showBase64StringMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Base64 image",
-		do:   showBase64ImgMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Color convertor",
-		do:   showColorTransformMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "lorem generator",
-		do:   showLoremMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "JWT",
-		do:   showJwtMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "PGP",
-		do:   showPgpMenu,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Unicode string",
-		do:   showUnicodeDEMenu,
-	})
-
-	m.show()
+	mm.show()
 	showDoYouWant2Continue()
 }
 
