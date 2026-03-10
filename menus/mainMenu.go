@@ -125,11 +125,6 @@ func BuildMenu() {
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "lorem generator",
-		do:   showLoremMenu,
-	})
-
-	mm.navItems = append(mm.navItems, navItem{
 		name: "JWT",
 		do:   showJwtMenu,
 	})

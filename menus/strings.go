@@ -2,6 +2,10 @@ package menus
 
 import (
 	"fmt"
+	"openDevTools/lorem"
+	"strconv"
+
+	"github.com/pterm/pterm"
 )
 
 func showStringsMenu() {
@@ -22,5 +26,25 @@ func showStringsMenu() {
 		},
 	})
 
+	m.navItems = append(m.navItems, navItem{
+		name: "Lorem generator",
+		do:   showLorem,
+	})
+
 	m.show()
+}
+
+func showLorem() {
+	ClearScreen()
+
+	textInput := pterm.DefaultInteractiveTextInput.WithDefaultText("enter word count")
+	text, _ := textInput.Show()
+
+	count, err := strconv.Atoi(text)
+	if err != nil {
+		pterm.Warning.Println(err)
+		return
+	}
+
+	showOutputMenu(lorem.Generate(count))
 }
