@@ -36,6 +36,11 @@ func showStringsMenu() {
 		do:   showUnicodeDEMenu,
 	})
 
+	m.navItems = append(m.navItems, navItem{
+		name: "Base64 string",
+		do:   showBase64StringMenu,
+	})
+
 	m.show()
 }
 

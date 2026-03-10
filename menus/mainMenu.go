@@ -110,11 +110,6 @@ func BuildMenu() {
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "Base64 string",
-		do:   showBase64StringMenu,
-	})
-
-	mm.navItems = append(mm.navItems, navItem{
 		name: "Base64 image",
 		do:   showBase64ImgMenu,
 	})
