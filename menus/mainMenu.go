@@ -134,11 +134,6 @@ func BuildMenu() {
 		do:   showPgpMenu,
 	})
 
-	mm.navItems = append(mm.navItems, navItem{
-		name: "Unicode string",
-		do:   showUnicodeDEMenu,
-	})
-
 }
 
 func ShowMainMenu() {

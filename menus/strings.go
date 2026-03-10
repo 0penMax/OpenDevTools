@@ -31,6 +31,11 @@ func showStringsMenu() {
 		do:   showLorem,
 	})
 
+	m.navItems = append(m.navItems, navItem{
+		name: "Unicode string",
+		do:   showUnicodeDEMenu,
+	})
+
 	m.show()
 }
 
