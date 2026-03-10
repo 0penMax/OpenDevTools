@@ -10,7 +10,7 @@ func showInputMenu(processF func(string) (string, error)) {
 	pterm.DefaultHeader.WithFullWidth().Println("Select input method")
 	pterm.Println()
 
-	navMap := make(map[string]func(processF func(string) (string, error)))
+	navMap := make(map[string]func(processF func(string) (string, error)) (string, error))
 	var menu []string
 
 	mi := "Multiline input"
@@ -24,7 +24,13 @@ func showInputMenu(processF func(string) (string, error)) {
 	selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
 
 	f := navMap[selectedOption]
-	f(processF)
+	r, err := f(processF)
+	if err != nil {
+		pterm.Warning.Println(err)
+		return
+	}
+
+	showOutputMenu(r)
 
 }
 
@@ -32,7 +38,7 @@ func nilErrorWrapper(processF func(string) string) func(string) (string, error) 
 	return func(v string) (string, error) { return processF(v), nil }
 }
 
-func showMultilineInput(processF func(string) (string, error)) {
+func showMultilineInput(processF func(string) (string, error)) (string, error) {
 	ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
@@ -45,13 +51,33 @@ func showMultilineInput(processF func(string) (string, error)) {
 	// Print a blank line for better readability in the output.
 	pterm.Println()
 
-	result, err := processF(text)
-	if err != nil {
-		pterm.Warning.Println(err)
-		return
-	}
+	return processF(text)
 
+}
+
+func showResult(value string) {
 	pterm.Info.Println("Result:")
-	pterm.Println(result)
+	pterm.Println(value)
+}
 
+func showOutputMenu(value string) {
+	ClearScreen()
+	pterm.DefaultHeader.WithFullWidth().Println("Select output method")
+	pterm.Println()
+	navMap := make(map[string]func(value string))
+	var menu []string
+
+	os := "On screen"
+	navMap[os] = showResult
+	menu = append(menu, os)
+
+	clp := "Save 2 clipboard"
+	navMap[clp] = save2Clipboard
+	menu = append(menu, clp)
+
+	selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
+
+	f := navMap[selectedOption]
+	ClearScreen()
+	f(value)
 }

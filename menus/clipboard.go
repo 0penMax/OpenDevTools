@@ -5,18 +5,16 @@ import (
 	"golang.design/x/clipboard"
 )
 
-func processFromClipboard(processF func(string) (string, error)) {
+func processFromClipboard(processF func(string) (string, error)) (string, error) {
 	ClearScreen()
 	pterm.Info.Println("Read from clipboard")
 	clipboardText := clipboard.Read(clipboard.FmtText)
 
-	r, err := processF(string(clipboardText))
-	if err != nil {
-		pterm.Warning.Println(err)
-		return
-	}
+	return processF(string(clipboardText))
+}
 
-	clipboard.Write(clipboard.FmtText, []byte(r))
+func save2Clipboard(value string) {
+	clipboard.Write(clipboard.FmtText, []byte(value))
 
 	pterm.Info.Println("Result copied to clipboard")
 }
