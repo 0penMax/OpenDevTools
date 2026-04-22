@@ -2,10 +2,10 @@ package menus
 
 import (
 	"fmt"
-	"github.com/nixinwang/dialog"
-	"github.com/pterm/pterm"
 	"openDevTools/pgp"
 	"os"
+
+	"github.com/pterm/pterm"
 )
 
 func showPgpMenu() {
@@ -26,10 +26,9 @@ func showPgpMenu() {
 func showPgpPublicKeyInputAndResult() {
 	ClearScreen()
 
-	filepath, err := dialog.File().Filter("any file", "*").Load()
-
-	if err != nil {
-		pterm.Warning.Println(err)
+	filepath, ok := OpenFileDialog(nil)
+	if !ok {
+		pterm.Warning.Println("openFileDialog cancelled")
 		return
 	}
 

@@ -23,9 +23,9 @@ import (
 	"github.com/makiuchi-d/gozxing/qrcode"
 )
 
-func Generate(data string, w io.Writer) error {
+func Generate(data []byte, w io.Writer) error {
 	enc := qrcode.NewQRCodeWriter()
-	img, err := enc.Encode(data, gozxing.BarcodeFormat_QR_CODE, 250, 250, nil)
+	img, err := enc.Encode(string(data), gozxing.BarcodeFormat_QR_CODE, 250, 250, nil)
 	if err != nil {
 		return err
 	}

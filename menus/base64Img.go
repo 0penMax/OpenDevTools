@@ -1,10 +1,11 @@
 package menus
 
 import (
-	"github.com/nixinwang/dialog"
-	"github.com/pterm/pterm"
-	"golang.design/x/clipboard"
 	"openDevTools/base64"
+
+	"github.com/pterm/pterm"
+	"github.com/sqweek/dialog"
+	"golang.design/x/clipboard"
 )
 
 func init() {
@@ -42,13 +43,12 @@ func showBase64ImgMenu() {
 func showBase64EncodeImgDialog() {
 	ClearScreen()
 
-	filepath, err := dialog.File().Filter("Image", "bmp", "ico", "webp", "svg", "gif", "png", "jpeg", "jpg").Load()
+	filepath, ok := OpenFileDialog([]string{"*.bmp", "*.ico", "*.webp", "*.svg", "*.gif", "*.png", "*.png", "*.jpeg", "*.jpg"})
 
-	if err != nil {
-		pterm.Warning.Println(err)
+	if !ok {
+		pterm.Warning.Println("openFileDialog cancelled")
 		return
 	}
-
 	pterm.Info.Println("filepath:", filepath)
 
 	result, err := base64.EncodeImage(filepath)
@@ -66,7 +66,7 @@ func showBase64EncodeImgDialog() {
 func showBase64EncodeImg2HtmlDialog() {
 	ClearScreen()
 
-	filepath, err := dialog.File().Filter("Image", "bmp", "ico", "webp", "svg", "gif", "png", "jpeg", "jpg").Load()
+	filepath, err := dialog.File().Load()
 
 	if err != nil {
 		pterm.Warning.Println(err)

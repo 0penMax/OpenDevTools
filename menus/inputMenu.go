@@ -1,6 +1,7 @@
 package menus
 
 import (
+	"github.com/0penMax/tinyfiledialogs"
 	"github.com/pterm/pterm"
 )
 
@@ -53,4 +54,9 @@ func showMultilineInput(processF func(string) (string, error)) (string, error) {
 
 	return processF(text)
 
+}
+
+func OpenFileDialog(filePatterns []string) (string, bool) {
+	sel, ok := tinyfiledialogs.OpenFileDialog("Source Files", "", filePatterns, "Go files", false)
+	return sel, ok
 }

@@ -150,6 +150,11 @@ func BuildMenu() {
 		do:    showPgpMenu,
 		mType: navigationMenu,
 	})
+	mm.navItems = append(mm.navItems, navItem{
+		name:  "QR Codes",
+		do:    showQRMenu,
+		mType: navigationMenu,
+	})
 
 }
 

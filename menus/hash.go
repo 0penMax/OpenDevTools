@@ -1,10 +1,10 @@
 package menus
 
 import (
-	"github.com/nixinwang/dialog"
-	"github.com/pterm/pterm"
 	"openDevTools/HashGenerator"
 	"openDevTools/models"
+
+	"github.com/pterm/pterm"
 )
 
 func showHashMenu() {
@@ -31,10 +31,9 @@ func showSelectFile4HashAndResult() {
 	ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
-	filepath, err := dialog.File().Filter("any file", "*").Load()
-
-	if err != nil {
-		pterm.Warning.Println(err)
+	filepath, ok := OpenFileDialog(nil)
+	if !ok {
+		pterm.Warning.Println("openFileDialog cancelled")
 		return
 	}
 

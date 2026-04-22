@@ -1,9 +1,13 @@
 package menus
 
 import (
-	"github.com/nixinwang/dialog"
-	"github.com/pterm/pterm"
+	"bytes"
+	"io"
 	"os"
+
+	"github.com/0penMax/tinyfiledialogs"
+
+	"github.com/pterm/pterm"
 )
 
 func showOutputMenu(value string) {
@@ -57,17 +61,28 @@ func showImgOutputMenu(data []byte) {
 
 func showSaveFile(data []byte) {
 	ClearScreen()
-	filepath, err := dialog.File().Save()
-
-	if err != nil {
-		pterm.Warning.Println(err)
+	filepath, ok := tinyfiledialogs.SaveFileDialog("new_file", "", nil, "save file")
+	if !ok {
+		pterm.Warning.Println("save file cancelled")
 		return
 	}
 
-	if err = os.WriteFile(filepath, data, 0644); err != nil {
+	if err := os.WriteFile(filepath, data, 0644); err != nil {
 		pterm.Warning.Println(err)
 		return
 	}
 
 	pterm.Println("saved file:", filepath)
+}
+
+func processAndSaveImg(processF func(data []byte, w io.Writer) error, data []byte) {
+	var buf bytes.Buffer
+
+	err := processF(data, &buf)
+	if err != nil {
+		pterm.Error.Println(err)
+		return
+	}
+
+	showImgOutputMenu(buf.Bytes())
 }
