@@ -24,21 +24,25 @@ func showStringsMenu() {
 				},
 			))
 		},
+		mType: navigationMenu,
 	})
 
 	m.navItems = append(m.navItems, navItem{
-		name: "Lorem generator",
-		do:   showLorem,
+		name:  "Lorem generator",
+		do:    showLorem,
+		mType: navigationMenu,
 	})
 
 	m.navItems = append(m.navItems, navItem{
-		name: "Unicode string",
-		do:   showUnicodeDEMenu,
+		name:  "Unicode string",
+		do:    showUnicodeDEMenu,
+		mType: navigationMenu,
 	})
 
 	m.navItems = append(m.navItems, navItem{
-		name: "Base64 string",
-		do:   showBase64StringMenu,
+		name:  "Base64 string",
+		do:    showBase64StringMenu,
+		mType: navigationMenu,
 	})
 
 	m.show()

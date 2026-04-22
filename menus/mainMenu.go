@@ -2,6 +2,7 @@ package menus
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
@@ -18,9 +19,17 @@ type Menu struct {
 }
 
 type navItem struct {
-	name string
-	do   func()
+	name  string
+	do    func()
+	mType menuType
 }
+
+type menuType string
+
+const (
+	navigationMenu menuType = "navigationMenu"
+	functionMenu   menuType = "functionMenu"
+)
 
 func (m *Menu) show() {
 	if m.title != "" {
@@ -31,24 +40,29 @@ func (m *Menu) show() {
 		pterm.Info.Println(m.desc)
 	}
 	if len(m.navItems) > 0 {
-		navMap := make(map[string]func())
+		navMap := make(map[string]navItem)
 		var menu []string
 		for _, n := range m.navItems {
-			navMap[n.name] = n.do
+			navMap[n.name] = n
 			menu = append(menu, n.name)
 		}
 
 		// Use PTerm's interactive select feature to present the options to the user and capture their selection
 		// The Show() method displays the options and waits for the user's input
 		selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(15).WithOptions(menu).Show()
+		item := navMap[selectedOption]
+		if item.mType == navigationMenu {
+			lastNavMenu = item.do
+		}
 
-		f := navMap[selectedOption]
-		f()
+		item.do()
 	}
 
 }
 
 var mm Menu
+
+var lastNavMenu func() = func() { fmt.Println("last function not found") }
 
 func ProcessShortcuts() bool {
 
@@ -90,43 +104,51 @@ func buildShortName(fullName string) string {
 func BuildMenu() {
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "JS",
-		do:   showJsMenu,
+		name:  "JS",
+		do:    showJsMenu,
+		mType: navigationMenu,
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "Hash Generator",
-		do:   showHashMenu,
+		name:  "Hash Generator",
+		do:    showHashMenu,
+		mType: navigationMenu,
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "Unixtime",
-		do:   showUnixTimeMenu,
+		name:  "Unixtime",
+		do:    showUnixTimeMenu,
+		mType: navigationMenu,
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "Strings",
-		do:   showStringsMenu,
+		name:  "Strings",
+		do:    showStringsMenu,
+		mType: navigationMenu,
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "Base64 image",
-		do:   showBase64ImgMenu,
+		name:  "Base64 image",
+		do:    showBase64ImgMenu,
+		mType: navigationMenu,
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "Color convertor",
-		do:   showColorTransformMenu,
+		name:  "Color convertor",
+		do:    showColorTransformMenu,
+		mType: navigationMenu,
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "JWT",
-		do:   showJwtMenu,
+		name:  "JWT",
+		do:    showJwtMenu,
+		mType: navigationMenu,
 	})
 
 	mm.navItems = append(mm.navItems, navItem{
-		name: "PGP",
-		do:   showPgpMenu,
+		name:  "PGP",
+		do:    showPgpMenu,
+		mType: navigationMenu,
 	})
 
 }
@@ -158,20 +180,30 @@ func ClearScreen() {
 }
 
 func showDoYouWant2Continue() {
-	// Create an interactive continue prompt with default settings
-	// This will pause the program execution until the user presses enter
-	// The message displayed is "Press 'Enter' to continue..."
-	prompt := pterm.DefaultInteractiveContinue
-	prompt.Options = []string{"yes", "no"}
 
-	// Show the prompt and wait for user input
-	// The returned result is the user's input (should be empty as it's a continue prompt)
-	// The second return value is an error which is ignored here
-	result, _ := prompt.Show()
+	var m Menu
 
-	if result == "yes" {
-		ShowMainMenu()
-	} else {
-		return
-	}
+	m.title = ""
+	m.desc = "Do you want to continue?"
+
+	m.navItems = append(m.navItems, navItem{
+		name:  "Last menu",
+		do:    lastNavMenu,
+		mType: navigationMenu,
+	})
+
+	m.navItems = append(m.navItems, navItem{
+		name:  "Main menu",
+		do:    ShowMainMenu,
+		mType: navigationMenu,
+	})
+
+	m.navItems = append(m.navItems, navItem{
+		name: "Exit",
+		do: func() {
+			return
+		},
+	})
+
+	m.show()
 }
