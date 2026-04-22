@@ -5,11 +5,13 @@ go 1.24
 toolchain go1.24.4
 
 require (
+	github.com/makiuchi-d/gozxing v0.1.1
 	github.com/nixinwang/dialog v0.0.0-20240524023314-b4bad92eff4d
 	github.com/pterm/pterm v0.12.81
 	github.com/tdewolff/minify/v2 v2.23.8
 	golang.design/x/clipboard v0.7.1
 	golang.org/x/crypto v0.39.0
+	golang.org/x/image v0.28.0
 )
 
 require (
@@ -25,9 +27,9 @@ require (
 	github.com/tdewolff/parse/v2 v2.8.1 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/exp/shiny v0.0.0-20250620022241-b7579e27df2b // indirect
-	golang.org/x/image v0.28.0 // indirect
 	golang.org/x/mobile v0.0.0-20250606033058-a2a15c67f36f // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/term v0.32.0 // indirect
 	golang.org/x/text v0.26.0 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
