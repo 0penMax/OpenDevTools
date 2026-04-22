@@ -15,6 +15,7 @@ Open source offline console realization for most popular tools for developers.
 - [x] JS Beautify
 - [x] JS Minify
 - [x] Encode/decode unicode string
+- [x] QR Code Reader/Generator
 - [ ] URL Encode/Decode
 - [ ] YAML to JSON
 - [ ] JSON to YAML
@@ -22,7 +23,6 @@ Open source offline console realization for most popular tools for developers.
 - [ ] HTML Beautify/Minify
 - [ ] CSS Beautify/Minify
 - [ ] JSON Format/Validate
-- [ ] QR Code Reader/Generator
 - [ ] JSON to CSV
 - [ ] CSV to JSON
 - [ ] String Case Converter
