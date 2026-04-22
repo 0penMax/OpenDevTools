@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+
 permissions:
   contents: write
 
@@ -37,25 +38,43 @@ jobs:
           GOARCH: amd64
         run: go build -o output/odt-linux .
 
-      - name: Install mingw-w64 for Windows cgo cross-compile
-        run: |
-          sudo apt update
-          sudo apt install -y mingw-w64
-
-      - name: Build for windows amd64 (cgo enabled via mingw-w64)
-        env:
-          CGO_ENABLED: 1
-          CC: x86_64-w64-mingw32-gcc
-          GOOS: windows
-          GOARCH: amd64
-        run: |
-          go build -o output/odt-windows.exe .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: linux-windows-binaries
+          name: linux-binaries
           path: output/*
+
+  build_windows_native:
+    needs: run_tests_build_linux_and_windows
+    runs-on: windows-2022
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.26'
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Ensure output dir
+        run: if not exist output mkdir output
+
+      - name: Build for windows amd64 (native cgo using MSVC)
+        env:
+          CGO_ENABLED: 1
+          GOOS: windows
+          GOARCH: amd64
+        run: go build -o output/odt-windows.exe .
+
+      - name: Upload Windows native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-native-binaries
+          path: output/odt-windows.exe
 
   build_mac_os:
     needs: run_tests_build_linux_and_windows
@@ -93,16 +112,22 @@ jobs:
           path: output/*
 
   release:
-    needs: build_mac_os
+    needs: [build_mac_os, build_windows_native]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Linux and Windows Artifacts
+      - name: Download Linux Artifacts
         uses: actions/download-artifact@v4
         with:
           name: linux-windows-binaries
+          path: output/
+
+      - name: Download Windows native Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-native-binaries
           path: output/
 
       - name: Download macOS Artifacts
@@ -120,7 +145,7 @@ jobs:
           tag: "commit-${{ github.sha }}"
         run: |
           gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="release-$tag" \
-              --generate-notes \
-              output/*
+            --repo="$GITHUB_REPOSITORY" \
+            --title="release-$tag" \
+            --generate-notes \
+            output/*
