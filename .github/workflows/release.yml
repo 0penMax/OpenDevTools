@@ -40,7 +40,7 @@ jobs:
 
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-binaries
           path: output/*
@@ -68,7 +68,7 @@ jobs:
         run: go build -o output/odt-windows.exe .
 
       - name: Upload Windows native artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows-native-binaries
           path: output/odt-windows.exe
@@ -102,7 +102,7 @@ jobs:
         run: go build -o output/odt-macos-arm .
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: macos-binaries
           path: output/*
