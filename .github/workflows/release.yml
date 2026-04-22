@@ -30,9 +30,9 @@ jobs:
       - name: Run tests
         run: go test ./...
 
-      - name: Build for linux amd64 (cgo disabled)
+      - name: Build for linux amd64
         env:
-          CGO_ENABLED: 0
+          CGO_ENABLED: 1
           GOOS: linux
           GOARCH: amd64
         run: go build -o output/odt-linux .
