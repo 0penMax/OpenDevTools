@@ -54,30 +54,3 @@ func showMultilineInput(processF func(string) (string, error)) (string, error) {
 	return processF(text)
 
 }
-
-func showResult(value string) {
-	pterm.Info.Println("Result:")
-	pterm.Println(value)
-}
-
-func showOutputMenu(value string) {
-	ClearScreen()
-	pterm.DefaultHeader.WithFullWidth().Println("Select output method")
-	pterm.Println()
-	navMap := make(map[string]func(value string))
-	var menu []string
-
-	os := "On screen"
-	navMap[os] = showResult
-	menu = append(menu, os)
-
-	clp := "Save 2 clipboard"
-	navMap[clp] = save2Clipboard
-	menu = append(menu, clp)
-
-	selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
-
-	f := navMap[selectedOption]
-	ClearScreen()
-	f(value)
-}
