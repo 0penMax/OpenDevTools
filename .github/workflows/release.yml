@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  run_tests_build_linux_and_windows:
+  run_tests_build_linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,7 +46,6 @@ jobs:
           path: output/*
 
   build_windows_native:
-    needs: run_tests_build_linux_and_windows
     runs-on: windows-2022
     steps:
       - name: Checkout code
@@ -59,9 +58,6 @@ jobs:
 
       - name: Install dependencies
         run: go mod tidy
-
-      - name: Ensure output dir
-        run: if not exist output mkdir output
 
       - name: Build for windows amd64 (native cgo using MSVC)
         env:
@@ -77,7 +73,6 @@ jobs:
           path: output/odt-windows.exe
 
   build_mac_os:
-    needs: run_tests_build_linux_and_windows
     runs-on: macos-14
     steps:
       - name: Checkout code
@@ -112,7 +107,7 @@ jobs:
           path: output/*
 
   release:
-    needs: [build_mac_os, build_windows_native]
+    needs: [build_mac_os, build_windows_native, run_tests_build_linux]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
