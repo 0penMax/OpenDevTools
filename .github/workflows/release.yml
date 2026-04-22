@@ -64,6 +64,7 @@ jobs:
           CGO_ENABLED: 1
           GOOS: windows
           GOARCH: amd64
+          CGO_LDFLAGS: -lole32 -lcomdlg32 -lshell32
         run: go build -o output/odt-windows.exe .
 
       - name: Upload Windows native artifact
