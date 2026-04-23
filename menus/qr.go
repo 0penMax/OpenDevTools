@@ -111,7 +111,7 @@ func showQrCodeResultTable(results []models.ResultItem) {
 
 func showSelectTypeQRMenu() {
 	reader := bufio.NewReader(os.Stdin)
-	options := []QR.QRType{QR.TypeURL, QR.TypeVCard, QR.TypeWiFi, QR.TypeSMS, QR.TypeTel, QR.TypeEmail, QR.TypeGeo, QR.TypeEvent, QR.TypePay}
+	options := []QR.QRType{QR.TypeRaw, QR.TypeURL, QR.TypeVCard, QR.TypeWiFi, QR.TypeSMS, QR.TypeTel, QR.TypeEmail, QR.TypeGeo, QR.TypeEvent, QR.TypePay}
 
 	ClearScreen()
 	var m Menu
@@ -207,6 +207,10 @@ func showSelectTypeQRMenu() {
 		fmt.Print("Payment payload (e.g., EMV QR string or UPI/VPA): ")
 		payload["payment"], _ = reader.ReadString('\n')
 		payload["payment"] = strings.TrimSpace(payload["payment"])
+	case QR.TypeRaw:
+		fmt.Print("Text: ")
+		payload["text"], _ = reader.ReadString('\n')
+		payload["text"] = strings.TrimSpace(payload["text"])
 	}
 
 	qrData := QR.QRSelection{Type: selected, Payload: payload}
