@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"image"
-	"image/png"
-	"io"
 	"openDevTools/models"
 
 	// import gif, jpeg, png
@@ -20,19 +18,7 @@ import (
 
 	"github.com/makiuchi-d/gozxing"
 	multiQR "github.com/makiuchi-d/gozxing/multi/qrcode"
-	"github.com/makiuchi-d/gozxing/qrcode"
 )
-
-func Generate(data []byte, w io.Writer) error {
-	enc := qrcode.NewQRCodeWriter()
-	img, err := enc.Encode(string(data), gozxing.BarcodeFormat_QR_CODE, 250, 250, nil)
-	if err != nil {
-		return err
-	}
-	// *BitMatrix implements the image.Image interface,
-	// so it is able to be passed to png.Encode directly.
-	return png.Encode(w, img)
-}
 
 func Scan(b []byte) ([]models.ResultItem, error) {
 	img, _, err := image.Decode(bytes.NewReader(b))

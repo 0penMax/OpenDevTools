@@ -5,6 +5,7 @@ go 1.26.2
 require (
 	github.com/0penMax/tinyfiledialogs v0.0.0-20260422175547-1105f1b10bbf
 	github.com/makiuchi-d/gozxing v0.1.1
+	github.com/piglig/go-qr v1.0.0
 	github.com/pterm/pterm v0.12.83
 	github.com/sqweek/dialog v0.0.0-20260123140253-64c163d53aac
 	github.com/tdewolff/minify/v2 v2.24.12

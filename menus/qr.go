@@ -3,6 +3,7 @@ package menus
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"openDevTools/QR"
 	"openDevTools/models"
 	"os"
@@ -221,7 +222,33 @@ func showSelectTypeQRMenu() {
 		return
 	}
 
-	pterm.Info.Println("qrCode image filetype - PNG")
-	processAndSaveImg(QR.Generate, []byte(data))
+	selectOutputType([]byte(data))
+}
 
+func selectOutputType(data []byte) {
+	options := []QR.OutputType{QR.Svg, QR.Png}
+
+	ClearScreen()
+	var m Menu
+
+	m.title = "QR Code Generator"
+	m.desc = "Select output type."
+
+	var selected QR.OutputType
+
+	for _, option := range options {
+		m.navItems = append(m.navItems, navItem{
+			name: string(option),
+			do: func() {
+				selected = option
+			},
+		})
+	}
+
+	m.show()
+
+	processAndSaveImg(
+		func(data []byte, w io.Writer) error {
+			return QR.Generate(data, selected, w)
+		}, data)
 }
