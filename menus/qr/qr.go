@@ -42,7 +42,7 @@ func showSelectFile4ScanQr() {
 	utils.ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
-	filepath, ok := io2.OpenFileDialog(nil) // TODO set actual types
+	filepath, ok := io2.OpenFileDialog([]string{"*.png", "*.jpeg", "*.jpg", "*.webp", "*.bmp"})
 
 	if !ok {
 		pterm.Warning.Println("openFileDialog cancelled")

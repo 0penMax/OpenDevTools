@@ -6,20 +6,19 @@ import (
 	"image"
 	"openDevTools/models"
 
-	// import gif, jpeg, png
-	_ "image/gif"
+	// import  jpeg, png
 	_ "image/jpeg"
 	_ "image/png"
 
-	// import bmp, tiff, webp
+	// import bmp,  webp
 	_ "golang.org/x/image/bmp"
-	_ "golang.org/x/image/tiff"
 	_ "golang.org/x/image/webp"
 
 	"github.com/makiuchi-d/gozxing"
 	multiQR "github.com/makiuchi-d/gozxing/multi/qrcode"
 )
 
+// Scan can read jpg, png, bmp, webp QR codes
 func Scan(b []byte) ([]models.ResultItem, error) {
 	img, _, err := image.Decode(bytes.NewReader(b))
 	if err != nil {
