@@ -1,38 +1,30 @@
-package menus
+package unixTime
 
 import (
-	"github.com/pterm/pterm"
+	"fmt"
 	"openDevTools/Unixtime"
+	"openDevTools/menus/io"
+	"openDevTools/menus/models"
+	"openDevTools/menus/utils"
 	"strconv"
+
+	"github.com/pterm/pterm"
 )
 
-func showUnixTimeMenu() {
-	ClearScreen()
-	var m Menu
-
-	m.title = "Unixtime"
-	m.desc = "Parse from/to unixtime."
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Now",
-		do:   showNowUnixTimeDialog,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "To unixtime",
-		do:   showToUnixtimeDialog,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "From unixtime",
-		do:   showFromUnixtimeDialog,
-	})
-
-	m.show()
+func Menu() {
+	utils.ShowMenu(
+		"Unixtime",
+		"Parse from/to unixtime.",
+		[]models.NavItem{
+			{Name: "Now", Do: showNowDialog},
+			{Name: "To unixtime", Do: showToDialog},
+			{Name: "From unixtime", Do: showFromDialog},
+		},
+	)
 }
 
-func showToUnixtimeDialog() {
-	ClearScreen()
+func showToDialog() {
+	utils.ClearScreen()
 
 	pterm.Println("Parser use UTC timezone.")
 	pterm.Println("Write your date in format - dd/mm/yyyy hh:mm:ss")
@@ -54,15 +46,12 @@ func showToUnixtimeDialog() {
 	pterm.Println(r)
 }
 
-func showNowUnixTimeDialog() {
-	ClearScreen()
-
-	pterm.Println(Unixtime.Now())
-
+func showNowDialog() {
+	io.ShowOutputMenu(fmt.Sprint(Unixtime.Now()))
 }
 
-func showFromUnixtimeDialog() {
-	ClearScreen()
+func showFromDialog() {
+	utils.ClearScreen()
 
 	pterm.Println("Write your unixtime:")
 	textInput := pterm.DefaultInteractiveTextInput
@@ -91,6 +80,6 @@ func showFromUnixtimeDialog() {
 		{"name", "value"},
 	}
 
-	showTable(tableHeader, r)
+	utils.ShowTable(tableHeader, r)
 
 }

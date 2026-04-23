@@ -1,19 +1,20 @@
-package menus
+package io
 
 import (
+	"openDevTools/menus/utils"
+
 	"github.com/pterm/pterm"
 	"golang.design/x/clipboard"
 )
 
 func processFromClipboard(processF func(string) (string, error)) (string, error) {
-	ClearScreen()
+	utils.ClearScreen()
 	pterm.Info.Println("Read from clipboard")
 	clipboardText := clipboard.Read(clipboard.FmtText)
 
 	return processF(string(clipboardText))
 }
-func readImgFromClipboard() ([]byte, error) {
-	ClearScreen()
+func ReadImgFromClipboard() ([]byte, error) {
 	pterm.Info.Println("Read from clipboard")
 	data := clipboard.Read(clipboard.FmtImage)
 

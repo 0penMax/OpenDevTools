@@ -1,10 +1,13 @@
-package menus
+package qr
 
 import (
 	"bufio"
 	"fmt"
 	"io"
 	"openDevTools/QR"
+	io2 "openDevTools/menus/io"
+	mModels "openDevTools/menus/models"
+	"openDevTools/menus/utils"
 	"openDevTools/models"
 	"os"
 	"strings"
@@ -12,52 +15,34 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func showQRMenu() {
-	ClearScreen()
-	var m Menu
-
-	m.title = "QR Code"
-	m.desc = "Encode and decode QR Code."
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Decode QR Code",
-		do:   decodeQRCodeMenu,
-	})
-	m.navItems = append(m.navItems, navItem{
-		name: "Encode QR Code",
-		do:   showSelectTypeQRMenu,
-	})
-
-	m.show()
+func Menu() {
+	utils.ShowMenu(
+		"QR Codes",
+		"Encode and decode QR Code.",
+		[]mModels.NavItem{
+			{Name: "Decode QR Code", Do: decodeMenu},
+			{Name: "Encode QR Code", Do: showSelectTypeQRMenu},
+		},
+	)
 
 }
 
-func decodeQRCodeMenu() {
-	ClearScreen()
-	var m Menu
-
-	m.title = "Decode QR Code"
-	m.desc = ""
-
-	m.navItems = append(m.navItems, navItem{
-		name: "From clipboard",
-		do:   showScanQrCodeFromClipboard,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "From file",
-		do:   showSelectFile4ScanQr,
-	})
-
-	m.show()
-
+func decodeMenu() {
+	utils.ShowMenu(
+		"Decode QR Code",
+		"Decode jpg, png, webp qr codes.",
+		[]mModels.NavItem{
+			{Name: "From clipboard", Do: scanFromClipboard},
+			{Name: "From file", Do: showSelectFile4ScanQr},
+		},
+	)
 }
 
 func showSelectFile4ScanQr() {
-	ClearScreen()
+	utils.ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
-	filepath, ok := OpenFileDialog(nil)
+	filepath, ok := io2.OpenFileDialog(nil) // TODO set actual types
 
 	if !ok {
 		pterm.Warning.Println("openFileDialog cancelled")
@@ -78,15 +63,15 @@ func showSelectFile4ScanQr() {
 		return
 	}
 
-	showQrCodeResultTable(result)
+	showResultTable(result)
 }
 
-func showScanQrCodeFromClipboard() {
-	ClearScreen()
+func scanFromClipboard() {
+	utils.ClearScreen()
 
 	pterm.Info.Println("Reading image from clipboard...")
 
-	data, err := readImgFromClipboard()
+	data, err := io2.ReadImgFromClipboard()
 	if err != nil {
 		pterm.Warning.Println(err)
 		return
@@ -98,40 +83,39 @@ func showScanQrCodeFromClipboard() {
 		return
 	}
 
-	showQrCodeResultTable(result)
+	showResultTable(result)
 
 }
 
-func showQrCodeResultTable(results []models.ResultItem) {
+func showResultTable(results []models.ResultItem) {
 	tableHeader := pterm.TableData{
 		{"index", "value"},
 	}
 
-	showTable(tableHeader, results)
+	utils.ShowTable(tableHeader, results)
 }
 
 func showSelectTypeQRMenu() {
 	reader := bufio.NewReader(os.Stdin)
+
 	options := []QR.QRType{QR.TypeRaw, QR.TypeURL, QR.TypeVCard, QR.TypeWiFi, QR.TypeSMS, QR.TypeTel, QR.TypeEmail, QR.TypeGeo, QR.TypeEvent, QR.TypePay}
-
-	ClearScreen()
-	var m Menu
-
-	m.title = "QR Code Generator"
-	m.desc = "Select a specialized QR payload type to build and encode."
-
+	var items []mModels.NavItem
 	var selected QR.QRType
 
 	for _, option := range options {
-		m.navItems = append(m.navItems, navItem{
-			name: string(option),
-			do: func() {
+		items = append(items, mModels.NavItem{
+			Name: string(option),
+			Do: func() {
 				selected = option
 			},
 		})
 	}
 
-	m.show()
+	utils.ShowMenu(
+		"QR Code Generator",
+		"Select a specialized QR payload type to build and encode.",
+		items,
+	)
 
 	payload := make(map[string]string)
 
@@ -228,26 +212,19 @@ func showSelectTypeQRMenu() {
 func selectOutputType(data []byte) {
 	options := []QR.OutputType{QR.Svg, QR.Png}
 
-	ClearScreen()
-	var m Menu
-
-	m.title = "QR Code Generator"
-	m.desc = "Select output type."
-
+	var items []mModels.NavItem
 	var selected QR.OutputType
 
 	for _, option := range options {
-		m.navItems = append(m.navItems, navItem{
-			name: string(option),
-			do: func() {
+		items = append(items, mModels.NavItem{
+			Name: string(option),
+			Do: func() {
 				selected = option
 			},
 		})
 	}
 
-	m.show()
-
-	processAndSaveImg(
+	io2.ProcessAndSaveImg(
 		func(data []byte, w io.Writer) error {
 			return QR.Generate(data, selected, w)
 		}, data)

@@ -1,8 +1,9 @@
-package menus
+package io
 
 import (
 	"bytes"
 	"io"
+	"openDevTools/menus/utils"
 	"os"
 
 	"github.com/0penMax/tinyfiledialogs"
@@ -10,8 +11,8 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func showOutputMenu(value string) {
-	ClearScreen()
+func ShowOutputMenu(value string) {
+	utils.ClearScreen()
 	pterm.DefaultHeader.WithFullWidth().Println("Select output method")
 	pterm.Println()
 	navMap := make(map[string]func(value string))
@@ -28,7 +29,7 @@ func showOutputMenu(value string) {
 	selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
 
 	f := navMap[selectedOption]
-	ClearScreen()
+	utils.ClearScreen()
 	f(value)
 }
 
@@ -38,7 +39,7 @@ func showResult(value string) {
 }
 
 func showImgOutputMenu(data []byte) {
-	ClearScreen()
+	utils.ClearScreen()
 	pterm.DefaultHeader.WithFullWidth().Println("Select output method")
 	pterm.Println()
 	navMap := make(map[string]func(value []byte))
@@ -55,12 +56,12 @@ func showImgOutputMenu(data []byte) {
 	selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
 
 	f := navMap[selectedOption]
-	ClearScreen()
+	utils.ClearScreen()
 	f(data)
 }
 
 func showSaveFile(data []byte) {
-	ClearScreen()
+	utils.ClearScreen()
 	filepath, ok := tinyfiledialogs.SaveFileDialog("new_file", "", nil, "save file")
 	if !ok {
 		pterm.Warning.Println("save file cancelled")
@@ -75,7 +76,7 @@ func showSaveFile(data []byte) {
 	pterm.Println("saved file:", filepath)
 }
 
-func processAndSaveImg(processF func(data []byte, w io.Writer) error, data []byte) {
+func ProcessAndSaveImg(processF func(data []byte, w io.Writer) error, data []byte) {
 	var buf bytes.Buffer
 
 	err := processF(data, &buf)

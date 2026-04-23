@@ -1,37 +1,32 @@
-package menus
+package hash
 
 import (
 	"openDevTools/HashGenerator"
+	"openDevTools/menus/io"
+	mModels "openDevTools/menus/models"
+	"openDevTools/menus/utils"
 	"openDevTools/models"
 
 	"github.com/pterm/pterm"
 )
 
-func showHashMenu() {
-	ClearScreen()
-	var m Menu
+func Menu() {
 
-	m.title = "Hash Generator"
-	m.desc = "Create MD5, SHA-1, SHA-256, SHA-384, SHA-512 from data."
-
-	m.navItems = append(m.navItems, navItem{
-		name: "From string",
-		do:   showHashInputAndResult,
-	})
-
-	m.navItems = append(m.navItems, navItem{
-		name: "From file",
-		do:   showSelectFile4HashAndResult,
-	})
-
-	m.show()
+	utils.ShowMenu(
+		"Hash generator",
+		"Create MD5, SHA-1, SHA-256, SHA-384, SHA-512 from data.",
+		[]mModels.NavItem{
+			{Name: "From string", Do: showHashInputAndResult},
+			{Name: "From file", Do: showSelectFile4HashAndResult},
+		},
+	)
 }
 
 func showSelectFile4HashAndResult() {
-	ClearScreen()
+	utils.ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
-	filepath, ok := OpenFileDialog(nil)
+	filepath, ok := io.OpenFileDialog(nil)
 	if !ok {
 		pterm.Warning.Println("openFileDialog cancelled")
 		return
@@ -54,11 +49,11 @@ func showHashTable(hashResult []models.ResultItem) {
 		{"hash name", "value"},
 	}
 
-	showTable(tableHeader, hashResult)
+	utils.ShowTable(tableHeader, hashResult)
 }
 
 func showHashInputAndResult() {
-	ClearScreen()
+	utils.ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
 	textInput := pterm.DefaultInteractiveTextInput.WithMultiLine()
@@ -74,11 +69,4 @@ func showHashInputAndResult() {
 
 	showHashTable(result)
 
-}
-
-func showTable(tableHeader pterm.TableData, tableData []models.ResultItem) {
-	for _, r := range tableData {
-		tableHeader = append(tableHeader, []string{r.Name, r.Value})
-	}
-	pterm.DefaultTable.WithHasHeader().WithData(tableHeader).Render()
 }

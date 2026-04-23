@@ -1,11 +1,13 @@
 package main
 
-import "openDevTools/menus"
+import (
+	menu "openDevTools/menus/mainMenu"
+)
 
 func main() {
-	menus.BuildMenu()
-	isFlagRun := menus.ProcessShortcuts()
+	menu.BuildMenu()
+	isFlagRun := menu.ProcessShortcuts()
 	if !isFlagRun {
-		menus.ShowMainMenu()
+		menu.ShowMainMenu()
 	}
 }

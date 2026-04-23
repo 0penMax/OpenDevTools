@@ -1,27 +1,24 @@
-package menus
+package jwt
 
 import (
-	"github.com/pterm/pterm"
 	"openDevTools/jwt"
+	"openDevTools/menus/models"
+	"openDevTools/menus/utils"
+
+	"github.com/pterm/pterm"
 )
 
-func showJwtMenu() {
-	ClearScreen()
-	var m Menu
-
-	m.title = "JWT"
-	m.desc = "Work with jwt tokens."
-
-	m.navItems = append(m.navItems, navItem{
-		name: "read",
-		do:   readJwtToken,
-	})
-
-	m.show()
+func Menu() {
+	utils.ShowMenu(
+		"JWT",
+		"Work with jwt tokens.",
+		[]models.NavItem{
+			{Name: "Read", Do: readJwtToken},
+		})
 }
 
 func readJwtToken() {
-	ClearScreen()
+	utils.ClearScreen()
 
 	textInput, err := pterm.DefaultInteractiveTextInput.WithMultiLine().WithDefaultText("jwt token").Show()
 	if err != nil {
@@ -40,10 +37,10 @@ func readJwtToken() {
 	}
 
 	pterm.Bold.Println("Header:")
-	showTable(tableHeader, result.Header)
+	utils.ShowTable(tableHeader, result.Header)
 	pterm.Println("")
 	pterm.Bold.Println("Payload:")
-	showTable(tableHeader, result.Payload)
+	utils.ShowTable(tableHeader, result.Payload)
 	pterm.Println("")
 	pterm.Bold.Println("Signature:")
 	pterm.Println(result.Signature)

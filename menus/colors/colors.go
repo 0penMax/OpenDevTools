@@ -1,19 +1,19 @@
-package menus
+package colors
 
 import (
-	"github.com/pterm/pterm"
 	"openDevTools/colors"
+	"openDevTools/menus/utils"
 	"openDevTools/models"
+
+	"github.com/pterm/pterm"
 )
 
-func showColorTransformMenu() {
-	ClearScreen()
-	var m Menu
-
-	m.title = "Color transformation"
-	m.desc = "Transform one of support colors formats to all others. Support most popular colors format: HEX, RGB, RGBA, HSL, HSLA and colors name. "
-
-	m.show()
+func Menu() {
+	utils.ShowMenu(
+		"Color transformation",
+		"Transform one of support colors formats to all others. Support most popular colors format: HEX, RGB, RGBA, HSL, HSLA and colors name. ",
+		nil,
+	)
 
 	isColorCorrect := false
 	var r []models.ResultItem
@@ -38,5 +38,5 @@ func showColorTransformMenu() {
 		{"name", "value"},
 	}
 
-	showTable(tableHeader, r)
+	utils.ShowTable(tableHeader, r)
 }

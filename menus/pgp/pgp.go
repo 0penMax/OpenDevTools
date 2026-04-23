@@ -1,32 +1,30 @@
-package menus
+package pgp
 
 import (
 	"fmt"
+	"openDevTools/menus/io"
+	"openDevTools/menus/models"
+	"openDevTools/menus/utils"
 	"openDevTools/pgp"
 	"os"
 
 	"github.com/pterm/pterm"
 )
 
-func showPgpMenu() {
-	ClearScreen()
-	var m Menu
+func Menu() {
+	utils.ShowMenu(
+		"PGP", "",
+		[]models.NavItem{
+			{Name: "Read data from key(public/private)", Do: showPgpPublicKeyInputAndResult},
+		},
+	)
 
-	m.title = "PGP"
-	m.desc = ""
-
-	m.navItems = append(m.navItems, navItem{
-		name: "Read data from key(public/private)",
-		do:   showPgpPublicKeyInputAndResult,
-	})
-
-	m.show()
 }
 
 func showPgpPublicKeyInputAndResult() {
-	ClearScreen()
+	utils.ClearScreen()
 
-	filepath, ok := OpenFileDialog(nil)
+	filepath, ok := io.OpenFileDialog(nil)
 	if !ok {
 		pterm.Warning.Println("openFileDialog cancelled")
 		return
@@ -54,6 +52,6 @@ func showPgpPublicKeyInputAndResult() {
 		{"name", "value"},
 	}
 
-	showTable(tableHeader, result)
+	utils.ShowTable(tableHeader, result)
 
 }

@@ -1,12 +1,14 @@
-package menus
+package io
 
 import (
+	"openDevTools/menus/utils"
+
 	"github.com/0penMax/tinyfiledialogs"
 	"github.com/pterm/pterm"
 )
 
-func showInputMenu(processF func(string) (string, error)) {
-	ClearScreen()
+func ShowInputMenu(processF func(string) (string, error)) {
+	utils.ClearScreen()
 
 	pterm.DefaultHeader.WithFullWidth().Println("Select input method")
 	pterm.Println()
@@ -31,16 +33,16 @@ func showInputMenu(processF func(string) (string, error)) {
 		return
 	}
 
-	showOutputMenu(r)
+	ShowOutputMenu(r)
 
 }
 
-func nilErrorWrapper(processF func(string) string) func(string) (string, error) {
+func NilErrorWrapper(processF func(string) string) func(string) (string, error) {
 	return func(v string) (string, error) { return processF(v), nil }
 }
 
 func showMultilineInput(processF func(string) (string, error)) (string, error) {
-	ClearScreen()
+	utils.ClearScreen()
 	// Create a default interactive text input with multi-line enabled.
 	// This allows the user to input multiple lines of text.
 	textInput := pterm.DefaultInteractiveTextInput.WithMultiLine()
