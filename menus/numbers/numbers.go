@@ -11,7 +11,7 @@ import (
 func Menu() {
 
 	utils.ShowMenu(
-		"Numbers converter",
+		"Numbers base converter",
 		"Convert your number in binary, octal, hex and decimal presentation, use the examples from the table below",
 		nil,
 	)

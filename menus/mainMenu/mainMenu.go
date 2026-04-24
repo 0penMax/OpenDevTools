@@ -90,7 +90,7 @@ func BuildMenu() {
 	})
 
 	mm.NavItems = append(mm.NavItems, models.NavItem{
-		Name:  "Number convertor",
+		Name:  "Number base convertor",
 		Do:    numbers.Menu,
 		MType: models.NavigationMenu,
 	})
