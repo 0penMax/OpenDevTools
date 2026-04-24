@@ -21,7 +21,7 @@ func ReadImgFromClipboard() ([]byte, error) {
 	return data, nil
 }
 
-func save2Clipboard(value string) {
+func save2Clipboard(value []byte) {
 	clipboard.Write(clipboard.FmtText, []byte(value))
 
 	pterm.Info.Println("Result copied to clipboard")

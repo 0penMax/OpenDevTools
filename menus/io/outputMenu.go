@@ -11,11 +11,11 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func ShowOutputMenu(value string) {
+func ShowOutputMenu(value []byte) {
 	utils.ClearScreen()
 	pterm.DefaultHeader.WithFullWidth().Println("Select output method")
 	pterm.Println()
-	navMap := make(map[string]func(value string))
+	navMap := make(map[string]func(value []byte))
 	var menu []string
 
 	os := "On screen"
@@ -26,6 +26,10 @@ func ShowOutputMenu(value string) {
 	navMap[clp] = save2Clipboard
 	menu = append(menu, clp)
 
+	sf := "Save file"
+	navMap[sf] = save2File
+	menu = append(menu, sf)
+
 	selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
 
 	f := navMap[selectedOption]
@@ -33,9 +37,9 @@ func ShowOutputMenu(value string) {
 	f(value)
 }
 
-func showResult(value string) {
+func showResult(value []byte) {
 	pterm.Info.Println("Result:")
-	pterm.Println(value)
+	pterm.Println(string(value))
 }
 
 func showImgOutputMenu(data []byte) {
@@ -46,7 +50,7 @@ func showImgOutputMenu(data []byte) {
 	var menu []string
 
 	sf := "Save file"
-	navMap[sf] = showSaveFile
+	navMap[sf] = save2File
 	menu = append(menu, sf)
 
 	clp := "Save 2 clipboard"
@@ -60,7 +64,7 @@ func showImgOutputMenu(data []byte) {
 	f(data)
 }
 
-func showSaveFile(data []byte) {
+func save2File(data []byte) {
 	utils.ClearScreen()
 	filepath, ok := tinyfiledialogs.SaveFileDialog("new_file", "", nil, "save file")
 	if !ok {

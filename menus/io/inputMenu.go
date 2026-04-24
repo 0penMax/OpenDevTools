@@ -40,7 +40,7 @@ func ShowInputMenu(processF func(string) (string, error)) {
 		return
 	}
 
-	ShowOutputMenu(r)
+	ShowOutputMenu([]byte(r))
 
 }
 

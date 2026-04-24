@@ -47,5 +47,5 @@ func showLorem() {
 		return
 	}
 
-	io.ShowOutputMenu(lorem.Generate(count))
+	io.ShowOutputMenu([]byte(lorem.Generate(count)))
 }

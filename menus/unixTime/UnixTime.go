@@ -1,7 +1,6 @@
 package unixTime
 
 import (
-	"fmt"
 	"openDevTools/Unixtime"
 	"openDevTools/menus/io"
 	"openDevTools/menus/models"
@@ -47,7 +46,7 @@ func showToDialog() {
 }
 
 func showNowDialog() {
-	io.ShowOutputMenu(fmt.Sprint(Unixtime.Now()))
+	io.ShowOutputMenu([]byte(Unixtime.Now()))
 }
 
 func showFromDialog() {
