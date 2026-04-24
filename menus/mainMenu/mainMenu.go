@@ -8,6 +8,7 @@ import (
 	"openDevTools/menus/js"
 	"openDevTools/menus/jwt"
 	"openDevTools/menus/models"
+	"openDevTools/menus/numbers"
 	"openDevTools/menus/pgp"
 	"openDevTools/menus/qr"
 	stringsMenu "openDevTools/menus/strings"
@@ -59,22 +60,15 @@ func buildShortName(fullName string) string {
 }
 
 func BuildMenu() {
-
 	mm.NavItems = append(mm.NavItems, models.NavItem{
-		Name:  "JS",
-		Do:    js.Menu,
+		Name:  "Unixtime",
+		Do:    unixTime.Menu,
 		MType: models.NavigationMenu,
 	})
 
 	mm.NavItems = append(mm.NavItems, models.NavItem{
 		Name:  "Hash Generator",
 		Do:    hash.Menu,
-		MType: models.NavigationMenu,
-	})
-
-	mm.NavItems = append(mm.NavItems, models.NavItem{
-		Name:  "Unixtime",
-		Do:    unixTime.Menu,
 		MType: models.NavigationMenu,
 	})
 
@@ -91,8 +85,13 @@ func BuildMenu() {
 	})
 
 	mm.NavItems = append(mm.NavItems, models.NavItem{
-		Name:  "Color convertor",
-		Do:    colors.Menu,
+		Name: "Color convertor",
+		Do:   colors.Menu,
+	})
+
+	mm.NavItems = append(mm.NavItems, models.NavItem{
+		Name:  "Number convertor",
+		Do:    numbers.Menu,
 		MType: models.NavigationMenu,
 	})
 
@@ -110,6 +109,12 @@ func BuildMenu() {
 	mm.NavItems = append(mm.NavItems, models.NavItem{
 		Name:  "QR Codes",
 		Do:    qr.Menu,
+		MType: models.NavigationMenu,
+	})
+
+	mm.NavItems = append(mm.NavItems, models.NavItem{
+		Name:  "JS",
+		Do:    js.Menu,
 		MType: models.NavigationMenu,
 	})
 
