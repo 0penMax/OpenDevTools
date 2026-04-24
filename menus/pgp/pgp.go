@@ -52,6 +52,6 @@ func showPgpPublicKeyInputAndResult() {
 		{"name", "value"},
 	}
 
-	utils.ShowTable(tableHeader, result)
+	utils.ShowTable(tableHeader, utils.ParseResultItems4Table(result))
 
 }

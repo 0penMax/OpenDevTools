@@ -92,7 +92,7 @@ func showResultTable(results []models.ResultItem) {
 		{"index", "value"},
 	}
 
-	utils.ShowTable(tableHeader, results)
+	utils.ShowTable(tableHeader, utils.ParseResultItems4Table(results))
 }
 
 func showSelectTypeQRMenu() {

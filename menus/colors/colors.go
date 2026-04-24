@@ -38,5 +38,5 @@ func Menu() {
 		{"name", "value"},
 	}
 
-	utils.ShowTable(tableHeader, r)
+	utils.ShowTable(tableHeader, utils.ParseResultItems4Table(r))
 }

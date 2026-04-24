@@ -37,10 +37,10 @@ func readJwtToken() {
 	}
 
 	pterm.Bold.Println("Header:")
-	utils.ShowTable(tableHeader, result.Header)
+	utils.ShowTable(tableHeader, utils.ParseResultItems4Table(result.Header))
 	pterm.Println("")
 	pterm.Bold.Println("Payload:")
-	utils.ShowTable(tableHeader, result.Payload)
+	utils.ShowTable(tableHeader, utils.ParseResultItems4Table(result.Payload))
 	pterm.Println("")
 	pterm.Bold.Println("Signature:")
 	pterm.Println(result.Signature)

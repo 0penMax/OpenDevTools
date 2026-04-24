@@ -33,9 +33,18 @@ func ShowMenu(title, desc string, items []mModels.NavItem) {
 	m.Show()
 }
 
-func ShowTable(tableHeader pterm.TableData, tableData []models.ResultItem) {
-	for _, r := range tableData {
-		tableHeader = append(tableHeader, []string{r.Name, r.Value})
+func ShowTable(tableHeader pterm.TableData, tableData pterm.TableData) {
+	tableHeader = append(tableHeader, tableData...)
+	err := pterm.DefaultTable.WithHasHeader().WithData(tableHeader).Render()
+	if err != nil {
+		pterm.Error.Println(err)
 	}
-	pterm.DefaultTable.WithHasHeader().WithData(tableHeader).Render()
+}
+
+func ParseResultItems4Table(tableData []models.ResultItem) pterm.TableData {
+	var table pterm.TableData
+	for _, r := range tableData {
+		table = append(table, []string{r.Name, r.Value})
+	}
+	return table
 }

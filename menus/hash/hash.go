@@ -49,7 +49,7 @@ func showHashTable(hashResult []models.ResultItem) {
 		{"hash name", "value"},
 	}
 
-	utils.ShowTable(tableHeader, hashResult)
+	utils.ShowTable(tableHeader, utils.ParseResultItems4Table(hashResult))
 }
 
 func showHashInputAndResult() {
