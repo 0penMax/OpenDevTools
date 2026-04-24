@@ -1,7 +1,10 @@
 package io
 
 import (
+	"errors"
+	"fmt"
 	"openDevTools/menus/utils"
+	"os"
 
 	"github.com/0penMax/tinyfiledialogs"
 	"github.com/pterm/pterm"
@@ -10,7 +13,7 @@ import (
 func ShowInputMenu(processF func(string) (string, error)) {
 	utils.ClearScreen()
 
-	pterm.DefaultHeader.WithFullWidth().Println("Select input method")
+	pterm.DefaultHeader.WithFullWidth().Println("Select text input method")
 	pterm.Println()
 
 	navMap := make(map[string]func(processF func(string) (string, error)) (string, error))
@@ -23,6 +26,10 @@ func ShowInputMenu(processF func(string) (string, error)) {
 	clp := "Clipboard"
 	navMap[clp] = processFromClipboard
 	menu = append(menu, clp)
+
+	ff := "From file"
+	navMap[ff] = processFromFile
+	menu = append(menu, ff)
 
 	selectedOption, _ := pterm.DefaultInteractiveSelect.WithMaxHeight(10).WithOptions(menu).Show()
 
@@ -61,4 +68,20 @@ func showMultilineInput(processF func(string) (string, error)) (string, error) {
 func OpenFileDialog(filePatterns []string) (string, bool) {
 	sel, ok := tinyfiledialogs.OpenFileDialog("Source Files", "", filePatterns, "Go files", false)
 	return sel, ok
+}
+
+func processFromFile(processF func(string) (string, error)) (string, error) {
+	path, ok := OpenFileDialog(nil)
+	if !ok {
+		return "", errors.New("user dismissed opening file dialog")
+	}
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	fmt.Println(string(data))
+
+	return processF(string(data))
 }
